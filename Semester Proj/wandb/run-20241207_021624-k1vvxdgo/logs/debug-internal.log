@@ -1,0 +1,23 @@
+{"time":"2024-12-07T02:16:24.9634915-05:00","level":"INFO","msg":"using version","core version":"0.19.0"}
+{"time":"2024-12-07T02:16:24.9634915-05:00","level":"INFO","msg":"created symlink","path":"c:\\Users\\epuls\\OneDrive\\Desktop\\VSCode Homework\\Semester Proj\\wandb\\run-20241207_021624-k1vvxdgo\\logs\\debug-core.log"}
+{"time":"2024-12-07T02:16:25.069735-05:00","level":"INFO","msg":"created new stream","id":"k1vvxdgo"}
+{"time":"2024-12-07T02:16:25.069735-05:00","level":"INFO","msg":"stream: started","id":"k1vvxdgo"}
+{"time":"2024-12-07T02:16:25.069735-05:00","level":"INFO","msg":"writer: Do: started","stream_id":"k1vvxdgo"}
+{"time":"2024-12-07T02:16:25.069735-05:00","level":"INFO","msg":"sender: started","stream_id":"k1vvxdgo"}
+{"time":"2024-12-07T02:16:25.069735-05:00","level":"INFO","msg":"handler: started","stream_id":"k1vvxdgo"}
+{"time":"2024-12-07T02:16:25.2182166-05:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-12-07T02:17:25.2577833-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-12-07T02:20:34.2154113-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-12-07T02:20:34.2186176-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-12-07T02:20:39.5181959-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-12-07T02:20:39.5277373-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-12-07T02:21:24.7658316-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-12-07T02:21:24.7688741-05:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-12-07T02:21:24.769398-05:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-12-07T02:21:25.1591116-05:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-12-07T02:21:25.2722143-05:00","level":"INFO","msg":"handler: operation stats","stats":{}}
+{"time":"2024-12-07T02:21:26.2867962-05:00","level":"INFO","msg":"stream: closing","id":"k1vvxdgo"}
+{"time":"2024-12-07T02:21:26.2867962-05:00","level":"INFO","msg":"handler: closed","stream_id":"k1vvxdgo"}
+{"time":"2024-12-07T02:21:26.2868179-05:00","level":"INFO","msg":"writer: Close: closed","stream_id":"k1vvxdgo"}
+{"time":"2024-12-07T02:21:26.2868179-05:00","level":"INFO","msg":"sender: closed","stream_id":"k1vvxdgo"}
+{"time":"2024-12-07T02:21:26.2868179-05:00","level":"INFO","msg":"stream: closed","id":"k1vvxdgo"}

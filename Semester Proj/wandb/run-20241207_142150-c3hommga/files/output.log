@@ -1,0 +1,9 @@
+Directories: ['/data_noise_a', '/data_noise_b']
+Initializing EXRDataset with transforms
+Train size: 600 | Train shape: torch.Size([2, 256, 256])
+Validation size: 200 | Validation shape: torch.Size([2, 256, 256])
+Test size: 200 | Test shape: torch.Size([2, 256, 256])
+Training  with validation split
+Early stopping at epoch: 39
+Test Loss: 0.00111387, Abs Test Accuracy: 0.10780853, Rel Test Accuracy: 0.00618213
+Real World Test Loss: 0.00258168, Real World Abs Test Accuracy: 0.09450562, Real World Rel Test Accuracy: 0.00589222

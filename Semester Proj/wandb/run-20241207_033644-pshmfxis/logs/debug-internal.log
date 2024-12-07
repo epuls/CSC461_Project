@@ -1,0 +1,17 @@
+{"time":"2024-12-07T03:36:44.513947-05:00","level":"INFO","msg":"using version","core version":"0.19.0"}
+{"time":"2024-12-07T03:36:44.513947-05:00","level":"INFO","msg":"created symlink","path":"c:\\Users\\epuls\\OneDrive\\Desktop\\VSCode Homework\\Semester Proj\\wandb\\run-20241207_033644-pshmfxis\\logs\\debug-core.log"}
+{"time":"2024-12-07T03:36:44.6190954-05:00","level":"INFO","msg":"created new stream","id":"pshmfxis"}
+{"time":"2024-12-07T03:36:44.6190954-05:00","level":"INFO","msg":"stream: started","id":"pshmfxis"}
+{"time":"2024-12-07T03:36:44.6190954-05:00","level":"INFO","msg":"writer: Do: started","stream_id":"pshmfxis"}
+{"time":"2024-12-07T03:36:44.6190954-05:00","level":"INFO","msg":"handler: started","stream_id":"pshmfxis"}
+{"time":"2024-12-07T03:36:44.6190954-05:00","level":"INFO","msg":"sender: started","stream_id":"pshmfxis"}
+{"time":"2024-12-07T03:36:44.7705646-05:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-12-07T03:38:52.479007-05:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-12-07T03:38:52.4796534-05:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-12-07T03:38:52.8635992-05:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-12-07T03:38:53.0555885-05:00","level":"INFO","msg":"handler: operation stats","stats":{}}
+{"time":"2024-12-07T03:38:54.0715608-05:00","level":"INFO","msg":"stream: closing","id":"pshmfxis"}
+{"time":"2024-12-07T03:38:54.0715608-05:00","level":"INFO","msg":"handler: closed","stream_id":"pshmfxis"}
+{"time":"2024-12-07T03:38:54.0715608-05:00","level":"INFO","msg":"writer: Close: closed","stream_id":"pshmfxis"}
+{"time":"2024-12-07T03:38:54.0715608-05:00","level":"INFO","msg":"sender: closed","stream_id":"pshmfxis"}
+{"time":"2024-12-07T03:38:54.0715608-05:00","level":"INFO","msg":"stream: closed","id":"pshmfxis"}

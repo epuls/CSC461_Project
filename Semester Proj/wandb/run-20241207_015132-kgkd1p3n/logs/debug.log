@@ -1,0 +1,82 @@
+2024-12-07 01:51:32,859 INFO    MainThread:13308 [wandb_setup.py:_flush():68] Current SDK version is 0.19.0
+2024-12-07 01:51:32,859 INFO    MainThread:13308 [wandb_setup.py:_flush():68] Configure stats pid to 13308
+2024-12-07 01:51:32,859 INFO    MainThread:13308 [wandb_setup.py:_flush():68] Loading settings from C:\Users\epuls\.config\wandb\settings
+2024-12-07 01:51:32,859 INFO    MainThread:13308 [wandb_setup.py:_flush():68] Loading settings from c:\Users\epuls\OneDrive\Desktop\VSCode Homework\Semester Proj\wandb\settings
+2024-12-07 01:51:32,860 INFO    MainThread:13308 [wandb_setup.py:_flush():68] Loading settings from environment variables
+2024-12-07 01:51:32,860 INFO    MainThread:13308 [wandb_init.py:_log_setup():528] Logging user logs to c:\Users\epuls\OneDrive\Desktop\VSCode Homework\Semester Proj\wandb\run-20241207_015132-kgkd1p3n\logs\debug.log
+2024-12-07 01:51:32,860 INFO    MainThread:13308 [wandb_init.py:_log_setup():529] Logging internal logs to c:\Users\epuls\OneDrive\Desktop\VSCode Homework\Semester Proj\wandb\run-20241207_015132-kgkd1p3n\logs\debug-internal.log
+2024-12-07 01:51:32,860 INFO    MainThread:13308 [wandb_init.py:init():639] calling init triggers
+2024-12-07 01:51:32,860 INFO    MainThread:13308 [wandb_init.py:init():645] wandb.init called with sweep_config: {}
+config: {'name': 'is this broken?', 'architecture': 'UNet', 'batch_size': 16, 'learning_rate': 0.002, 'criterion': 'MSELoss', 'weight_decay': 0.01, 'patience': 5, 'min_delta': 1e-05, 'lr_scheduler': 'type', 'scheduler_params': {'mode': 'min', 'factor': 0.1, 'patience': 5, 'min_lr': 1e-06}}
+2024-12-07 01:51:32,861 INFO    MainThread:13308 [wandb_init.py:init():688] starting backend
+2024-12-07 01:51:32,861 INFO    MainThread:13308 [wandb_init.py:init():692] sending inform_init request
+2024-12-07 01:51:32,862 INFO    MainThread:13308 [backend.py:_multiprocessing_setup():104] multiprocessing start_methods=spawn, using: spawn
+2024-12-07 01:51:32,862 INFO    MainThread:13308 [wandb_init.py:init():705] backend started and connected
+2024-12-07 01:51:32,865 INFO    MainThread:13308 [wandb_run.py:_label_probe_notebook():1327] probe notebook
+2024-12-07 01:51:32,867 INFO    MainThread:13308 [wandb_init.py:init():798] updated telemetry
+2024-12-07 01:51:32,892 INFO    MainThread:13308 [wandb_init.py:init():830] communicating run to backend with 90.0 second timeout
+2024-12-07 01:51:49,989 WARNING MainThread:13308 [wandb_init.py:init():1309] interrupted
+Traceback (most recent call last):
+  File "c:\ProgramData\anaconda3\Lib\site-packages\wandb\sdk\wandb_init.py", line 1305, in init
+    return wi.init()
+           ^^^^^^^^^
+  File "c:\ProgramData\anaconda3\Lib\site-packages\wandb\sdk\wandb_init.py", line 833, in init
+    result = run_init_handle.wait(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "c:\ProgramData\anaconda3\Lib\site-packages\wandb\sdk\lib\mailbox.py", line 279, in wait
+    found, abandoned = self._slot._get_and_clear(timeout=wait_timeout)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\ProgramData\anaconda3\Lib\site-packages\wandb\sdk\lib\mailbox.py", line 126, in _get_and_clear
+    if self._wait(timeout=timeout):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\ProgramData\anaconda3\Lib\site-packages\wandb\sdk\lib\mailbox.py", line 122, in _wait
+    return self._event.wait(timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\ProgramData\anaconda3\Lib\threading.py", line 655, in wait
+    signaled = self._cond.wait(timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\ProgramData\anaconda3\Lib\threading.py", line 359, in wait
+    gotit = waiter.acquire(True, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+2024-12-07 01:52:44,526 INFO    MainThread:13308 [wandb_setup.py:_flush():68] Current SDK version is 0.19.0
+2024-12-07 01:52:44,526 INFO    MainThread:13308 [wandb_setup.py:_flush():68] Configure stats pid to 13308
+2024-12-07 01:52:44,527 INFO    MainThread:13308 [wandb_setup.py:_flush():68] Loading settings from C:\Users\epuls\.config\wandb\settings
+2024-12-07 01:52:44,527 INFO    MainThread:13308 [wandb_setup.py:_flush():68] Loading settings from c:\Users\epuls\OneDrive\Desktop\VSCode Homework\Semester Proj\wandb\settings
+2024-12-07 01:52:44,527 INFO    MainThread:13308 [wandb_setup.py:_flush():68] Loading settings from environment variables
+2024-12-07 01:52:44,527 INFO    MainThread:13308 [wandb_init.py:_log_setup():528] Logging user logs to c:\Users\epuls\OneDrive\Desktop\VSCode Homework\Semester Proj\wandb\run-20241207_015244-idsi1qz2\logs\debug.log
+2024-12-07 01:52:44,527 INFO    MainThread:13308 [wandb_init.py:_log_setup():529] Logging internal logs to c:\Users\epuls\OneDrive\Desktop\VSCode Homework\Semester Proj\wandb\run-20241207_015244-idsi1qz2\logs\debug-internal.log
+2024-12-07 01:52:44,527 INFO    MainThread:13308 [wandb_init.py:init():639] calling init triggers
+2024-12-07 01:52:44,527 INFO    MainThread:13308 [wandb_init.py:init():645] wandb.init called with sweep_config: {}
+config: {'name': 'is this broken?', 'architecture': 'UNet', 'batch_size': 16, 'learning_rate': 0.002, 'criterion': 'MSELoss', 'weight_decay': 0.01, 'patience': 5, 'min_delta': 1e-05, 'lr_scheduler': 'type', 'scheduler_params': {'mode': 'min', 'factor': 0.1, 'patience': 5, 'min_lr': 1e-06}}
+2024-12-07 01:52:44,528 INFO    MainThread:13308 [wandb_init.py:init():688] starting backend
+2024-12-07 01:52:44,528 INFO    MainThread:13308 [wandb_init.py:init():692] sending inform_init request
+2024-12-07 01:52:44,529 INFO    MainThread:13308 [backend.py:_multiprocessing_setup():104] multiprocessing start_methods=spawn, using: spawn
+2024-12-07 01:52:44,530 INFO    MainThread:13308 [wandb_init.py:init():705] backend started and connected
+2024-12-07 01:52:44,532 INFO    MainThread:13308 [wandb_run.py:_label_probe_notebook():1327] probe notebook
+2024-12-07 01:52:44,534 INFO    MainThread:13308 [wandb_init.py:init():798] updated telemetry
+2024-12-07 01:52:44,556 INFO    MainThread:13308 [wandb_init.py:init():830] communicating run to backend with 90.0 second timeout
+2024-12-07 01:52:54,619 WARNING MainThread:13308 [wandb_init.py:init():1309] interrupted
+Traceback (most recent call last):
+  File "c:\ProgramData\anaconda3\Lib\site-packages\wandb\sdk\wandb_init.py", line 1305, in init
+    return wi.init()
+           ^^^^^^^^^
+  File "c:\ProgramData\anaconda3\Lib\site-packages\wandb\sdk\wandb_init.py", line 833, in init
+    result = run_init_handle.wait(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "c:\ProgramData\anaconda3\Lib\site-packages\wandb\sdk\lib\mailbox.py", line 279, in wait
+    found, abandoned = self._slot._get_and_clear(timeout=wait_timeout)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\ProgramData\anaconda3\Lib\site-packages\wandb\sdk\lib\mailbox.py", line 126, in _get_and_clear
+    if self._wait(timeout=timeout):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\ProgramData\anaconda3\Lib\site-packages\wandb\sdk\lib\mailbox.py", line 122, in _wait
+    return self._event.wait(timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\ProgramData\anaconda3\Lib\threading.py", line 655, in wait
+    signaled = self._cond.wait(timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\ProgramData\anaconda3\Lib\threading.py", line 359, in wait
+    gotit = waiter.acquire(True, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt

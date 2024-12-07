@@ -1,0 +1,19 @@
+{"time":"2024-12-07T15:11:08.6530417-05:00","level":"INFO","msg":"using version","core version":"0.19.0"}
+{"time":"2024-12-07T15:11:08.6530417-05:00","level":"INFO","msg":"created symlink","path":"c:\\Users\\epuls\\OneDrive\\Desktop\\VSCode Homework\\Semester Proj\\wandb\\run-20241207_151108-x0ji9zed\\logs\\debug-core.log"}
+{"time":"2024-12-07T15:11:08.7586937-05:00","level":"INFO","msg":"created new stream","id":"x0ji9zed"}
+{"time":"2024-12-07T15:11:08.7586937-05:00","level":"INFO","msg":"stream: started","id":"x0ji9zed"}
+{"time":"2024-12-07T15:11:08.7586937-05:00","level":"INFO","msg":"writer: Do: started","stream_id":"x0ji9zed"}
+{"time":"2024-12-07T15:11:08.7586937-05:00","level":"INFO","msg":"sender: started","stream_id":"x0ji9zed"}
+{"time":"2024-12-07T15:11:08.7586937-05:00","level":"INFO","msg":"handler: started","stream_id":"x0ji9zed"}
+{"time":"2024-12-07T15:11:09.1820913-05:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-12-07T15:12:04.4496869-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-12-07T15:12:41.502106-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-12-07T15:12:41.5051477-05:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-12-07T15:12:41.5056664-05:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-12-07T15:12:42.5062335-05:00","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading summary","runtime_seconds":0.6071531},{"desc":"updating run config","runtime_seconds":0.6071531}],"total_operations":2}}
+{"time":"2024-12-07T15:12:43.3500305-05:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-12-07T15:12:44.5891046-05:00","level":"INFO","msg":"stream: closing","id":"x0ji9zed"}
+{"time":"2024-12-07T15:12:44.5891046-05:00","level":"INFO","msg":"handler: closed","stream_id":"x0ji9zed"}
+{"time":"2024-12-07T15:12:44.5891046-05:00","level":"INFO","msg":"writer: Close: closed","stream_id":"x0ji9zed"}
+{"time":"2024-12-07T15:12:44.5891046-05:00","level":"INFO","msg":"sender: closed","stream_id":"x0ji9zed"}
+{"time":"2024-12-07T15:12:44.5901042-05:00","level":"INFO","msg":"stream: closed","id":"x0ji9zed"}

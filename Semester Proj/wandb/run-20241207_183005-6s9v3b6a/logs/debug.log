@@ -1,0 +1,35 @@
+2024-12-07 18:30:05,627 INFO    MainThread:28280 [wandb_setup.py:_flush():68] Current SDK version is 0.19.0
+2024-12-07 18:30:05,627 INFO    MainThread:28280 [wandb_setup.py:_flush():68] Configure stats pid to 28280
+2024-12-07 18:30:05,627 INFO    MainThread:28280 [wandb_setup.py:_flush():68] Loading settings from C:\Users\epuls\.config\wandb\settings
+2024-12-07 18:30:05,627 INFO    MainThread:28280 [wandb_setup.py:_flush():68] Loading settings from c:\Users\epuls\OneDrive\Desktop\VSCode Homework\Semester Proj\wandb\settings
+2024-12-07 18:30:05,627 INFO    MainThread:28280 [wandb_setup.py:_flush():68] Loading settings from environment variables
+2024-12-07 18:30:05,627 INFO    MainThread:28280 [wandb_init.py:_log_setup():528] Logging user logs to c:\Users\epuls\OneDrive\Desktop\VSCode Homework\Semester Proj\wandb\run-20241207_183005-6s9v3b6a\logs\debug.log
+2024-12-07 18:30:05,628 INFO    MainThread:28280 [wandb_init.py:_log_setup():529] Logging internal logs to c:\Users\epuls\OneDrive\Desktop\VSCode Homework\Semester Proj\wandb\run-20241207_183005-6s9v3b6a\logs\debug-internal.log
+2024-12-07 18:30:05,628 INFO    MainThread:28280 [wandb_init.py:_jupyter_setup():474] configuring jupyter hooks <wandb.sdk.wandb_init._WandbInit object at 0x000001D958E26C90>
+2024-12-07 18:30:05,628 INFO    MainThread:28280 [wandb_init.py:init():639] calling init triggers
+2024-12-07 18:30:05,628 INFO    MainThread:28280 [wandb_init.py:init():645] wandb.init called with sweep_config: {}
+config: {'name': 'Leading-16_patient_50ep', 'architecture': 'UNet', 'batch_size': 16, 'learning_rate': 0.01, 'criterion': 'MSELoss', 'weight_decay': 0.01, 'patience': 10, 'min_delta': 1e-06, 'lr_scheduler': 'ReduceLROnPlateau', 'scheduler_params': {'mode': 'min', 'factor': 0.1, 'patience': 5, 'min_lr': 1e-06}, 'transforms': []}
+2024-12-07 18:30:05,628 INFO    MainThread:28280 [wandb_init.py:init():688] starting backend
+2024-12-07 18:30:05,628 INFO    MainThread:28280 [wandb_init.py:init():692] sending inform_init request
+2024-12-07 18:30:05,630 INFO    MainThread:28280 [backend.py:_multiprocessing_setup():104] multiprocessing start_methods=spawn, using: spawn
+2024-12-07 18:30:05,631 INFO    MainThread:28280 [wandb_init.py:init():705] backend started and connected
+2024-12-07 18:30:05,634 INFO    MainThread:28280 [wandb_run.py:_label_probe_notebook():1327] probe notebook
+2024-12-07 18:30:05,635 INFO    MainThread:28280 [wandb_run.py:_label_probe_notebook():1337] Unable to probe notebook: 'charmap' codec can't decode byte 0x81 in position 41844: character maps to <undefined>
+2024-12-07 18:30:05,635 INFO    MainThread:28280 [wandb_init.py:init():798] updated telemetry
+2024-12-07 18:30:05,665 INFO    MainThread:28280 [wandb_init.py:init():830] communicating run to backend with 90.0 second timeout
+2024-12-07 18:30:05,879 INFO    MainThread:28280 [wandb_init.py:init():882] starting run threads in backend
+2024-12-07 18:30:06,270 INFO    MainThread:28280 [wandb_run.py:_console_start():2443] atexit reg
+2024-12-07 18:30:06,270 INFO    MainThread:28280 [wandb_run.py:_redirect():2293] redirect: wrap_raw
+2024-12-07 18:30:06,270 INFO    MainThread:28280 [wandb_run.py:_redirect():2358] Wrapping output streams.
+2024-12-07 18:30:06,270 INFO    MainThread:28280 [wandb_run.py:_redirect():2383] Redirects installed.
+2024-12-07 18:30:06,271 INFO    MainThread:28280 [wandb_init.py:init():925] run started, returning control to user process
+2024-12-07 18:40:10,810 INFO    MainThread:28280 [wandb_run.py:_finish():2169] finishing run epuls-university-of-rhode-island/shallow water prediction final/6s9v3b6a
+2024-12-07 18:40:10,810 INFO    MainThread:28280 [jupyter.py:save_history():459] not saving jupyter history
+2024-12-07 18:40:10,810 INFO    MainThread:28280 [jupyter.py:save_ipynb():387] not saving jupyter notebook
+2024-12-07 18:40:10,810 INFO    MainThread:28280 [wandb_init.py:_jupyter_teardown():456] cleaning up jupyter logic
+2024-12-07 18:40:10,810 INFO    MainThread:28280 [wandb_run.py:_atexit_cleanup():2408] got exitcode: 0
+2024-12-07 18:40:10,810 INFO    MainThread:28280 [wandb_run.py:_restore():2390] restore
+2024-12-07 18:40:10,811 INFO    MainThread:28280 [wandb_run.py:_restore():2396] restore done
+2024-12-07 18:40:12,374 INFO    MainThread:28280 [wandb_run.py:_footer_history_summary_info():3951] rendering history
+2024-12-07 18:40:12,374 INFO    MainThread:28280 [wandb_run.py:_footer_history_summary_info():3983] rendering summary
+2024-12-07 18:40:12,378 INFO    MainThread:28280 [wandb_run.py:_footer_sync_info():3912] logging synced files

@@ -1,0 +1,10 @@
+Using device: cuda
+Test only size: 299 | Test shape: torch.Size([2, 256, 256])
+Test only size: 299 | Test shape: torch.Size([2, 256, 256])
+Directories: ['/data_noise_a', '/data_noise_b', '/data_noise_c']
+Train size: 1350 | Train shape: torch.Size([2, 256, 256])
+Validation size: 75 | Validation shape: torch.Size([2, 256, 256])
+Test size: 75 | Test shape: torch.Size([2, 256, 256])
+Training  with validation split
+Test Loss: 0.00085138, Abs Test Accuracy: 0.45614251, Rel Test Accuracy: 0.00921976
+Real World Test Loss: 0.00174276, Real World Abs Test Accuracy: 0.37500170, Real World Rel Test Accuracy: 0.00749547

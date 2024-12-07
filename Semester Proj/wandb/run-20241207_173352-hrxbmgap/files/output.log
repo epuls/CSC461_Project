@@ -1,0 +1,7 @@
+Directories: ['/data_noise_a', '/data_noise_b', '/data_noise_c']
+Train size: 900 | Train shape: torch.Size([2, 256, 256])
+Validation size: 300 | Validation shape: torch.Size([2, 256, 256])
+Test size: 300 | Test shape: torch.Size([2, 256, 256])
+Training  with validation split
+Test Loss: 0.00083779, Abs Test Accuracy: 0.45408128, Rel Test Accuracy: 0.00843958
+Real World Test Loss: 0.00170734, Real World Abs Test Accuracy: 0.36277221, Real World Rel Test Accuracy: 0.00729994
