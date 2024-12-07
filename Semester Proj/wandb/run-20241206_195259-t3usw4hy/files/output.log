@@ -1,0 +1,12 @@
+Directories: ['/data_noise_a', '/data_noise_b']
+Loading local directories: ['/data_noise_a', '/data_noise_b']
+Concat directories:
+['/data_noise_a', '/data_noise_b']
+Initializing EXRDataset with transforms
+Train size: 600 | Train shape: torch.Size([2, 256, 256])
+Validation size: 200 | Validation shape: torch.Size([2, 256, 256])
+Test size: 200 | Test shape: torch.Size([2, 256, 256])
+Training Unet with p=0.25 Random Horizontal and Vertical Flips and Rotations DepthMSELoss with validation split
+Early stopping
+Test Loss: 0.0028867926538133849463652
+Real World Test Loss: 0.0052399983866309894284252

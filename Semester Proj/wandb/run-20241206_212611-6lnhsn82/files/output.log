@@ -1,0 +1,47 @@
+Directories: ['/data_noise_a', '/data_noise_b']
+Loading local directories: ['/data_noise_a', '/data_noise_b']
+Concat directories:
+['/data_noise_a', '/data_noise_b']
+Train size: 600 | Train shape: torch.Size([2, 256, 256])
+Validation size: 200 | Validation shape: torch.Size([2, 256, 256])
+Test size: 200 | Test shape: torch.Size([2, 256, 256])
+Training Unet four pass full transforms MSELoss with validation split
+Early stopping at epoch: 46
+Test Loss: 0.0008698180899955332279205
+Real World Test Loss: 0.0027611345321253344051171
+Directories: ['/data_noise_a', '/data_noise_b']
+Loading local directories: ['/data_noise_a', '/data_noise_b']
+Concat directories:
+['/data_noise_a', '/data_noise_b']
+Initializing EXRDataset with transforms
+Train size: 600 | Train shape: torch.Size([2, 256, 256])
+Validation size: 200 | Validation shape: torch.Size([2, 256, 256])
+Test size: 200 | Test shape: torch.Size([2, 256, 256])
+Training Unet four pass full transforms MSELoss with validation split
+Early stopping at epoch: 15
+Test Loss: 0.0009554052197087842517725
+Real World Test Loss: 0.0037225823374257378459151
+Directories: ['/data_noise_a', '/data_noise_b']
+Loading local directories: ['/data_noise_a', '/data_noise_b']
+Concat directories:
+['/data_noise_a', '/data_noise_b']
+Initializing EXRDataset with transforms
+Train size: 600 | Train shape: torch.Size([2, 256, 256])
+Validation size: 200 | Validation shape: torch.Size([2, 256, 256])
+Test size: 200 | Test shape: torch.Size([2, 256, 256])
+Training Unet four pass full transforms MSELoss with validation split
+Early stopping at epoch: 9
+Test Loss: 0.0008015404455363750457764
+Real World Test Loss: 0.0024420932231433724844682
+Directories: ['/data_noise_a', '/data_noise_b']
+Loading local directories: ['/data_noise_a', '/data_noise_b']
+Concat directories:
+['/data_noise_a', '/data_noise_b']
+Initializing EXRDataset with transforms
+Train size: 600 | Train shape: torch.Size([2, 256, 256])
+Validation size: 200 | Validation shape: torch.Size([2, 256, 256])
+Test size: 200 | Test shape: torch.Size([2, 256, 256])
+Training Unet four pass full transforms MSELoss with validation split
+Early stopping at epoch: 8
+Test Loss: 0.0008536033699503884448687
+Real World Test Loss: 0.0031798300966248264388947

@@ -1,0 +1,29 @@
+Directories: ['/data_noise_a', '/data_noise_b']
+Loading local directories: ['/data_noise_a', '/data_noise_b']
+Concat directories:
+['/data_noise_a', '/data_noise_b']
+Initializing EXRDataset with transforms
+Train size: 600 | Train shape: torch.Size([2, 256, 256])
+Validation size: 200 | Validation shape: torch.Size([2, 256, 256])
+Test size: 200 | Test shape: torch.Size([2, 256, 256])
+Training Unet with p=0.25 MSE Loss with validation split
+Loading local directories: ['/data_noise_b']
+Concat directories:
+['/data_noise_b']
+Train size: 300 | Train shape: torch.Size([2, 256, 256])
+Validation size: 100 | Validation shape: torch.Size([2, 256, 256])
+Test size: 100 | Test shape: torch.Size([2, 256, 256])
+Using device: cuda
+Test only size: 299 | Test shape: torch.Size([2, 256, 256])
+Directories: ['/data_noise_a', '/data_noise_b']
+Loading local directories: ['/data_noise_a', '/data_noise_b']
+Concat directories:
+['/data_noise_a', '/data_noise_b']
+Initializing EXRDataset with transforms
+Train size: 600 | Train shape: torch.Size([2, 256, 256])
+Validation size: 200 | Validation shape: torch.Size([2, 256, 256])
+Test size: 200 | Test shape: torch.Size([2, 256, 256])
+Training Unet with p=0.25 MSE Loss with validation split
+Early stopping at epoch: 15
+Test Loss: 0.0016288821710846745384471
+Real World Test Loss: 0.0028218505405310234657179
