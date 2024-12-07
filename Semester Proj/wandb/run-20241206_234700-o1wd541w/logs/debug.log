@@ -1,0 +1,31 @@
+2024-12-06 23:47:00,295 INFO    MainThread:14688 [wandb_setup.py:_flush():68] Current SDK version is 0.19.0
+2024-12-06 23:47:00,296 INFO    MainThread:14688 [wandb_setup.py:_flush():68] Configure stats pid to 14688
+2024-12-06 23:47:00,296 INFO    MainThread:14688 [wandb_setup.py:_flush():68] Loading settings from C:\Users\epuls\.config\wandb\settings
+2024-12-06 23:47:00,296 INFO    MainThread:14688 [wandb_setup.py:_flush():68] Loading settings from c:\Users\epuls\OneDrive\Desktop\VSCode Homework\Semester Proj\wandb\settings
+2024-12-06 23:47:00,296 INFO    MainThread:14688 [wandb_setup.py:_flush():68] Loading settings from environment variables
+2024-12-06 23:47:00,296 INFO    MainThread:14688 [wandb_init.py:_log_setup():528] Logging user logs to c:\Users\epuls\OneDrive\Desktop\VSCode Homework\Semester Proj\wandb\run-20241206_234700-o1wd541w\logs\debug.log
+2024-12-06 23:47:00,297 INFO    MainThread:14688 [wandb_init.py:_log_setup():529] Logging internal logs to c:\Users\epuls\OneDrive\Desktop\VSCode Homework\Semester Proj\wandb\run-20241206_234700-o1wd541w\logs\debug-internal.log
+2024-12-06 23:47:00,298 INFO    MainThread:14688 [wandb_init.py:init():639] calling init triggers
+2024-12-06 23:47:00,298 INFO    MainThread:14688 [wandb_init.py:init():645] wandb.init called with sweep_config: {}
+config: {'name': 'noise_ab_depth_loss_patient', 'architecture': 'UNet', 'batch_size': 16, 'learning_rate': 0.002, 'criterion': 'DepthMSELoss', 'weight_decay': 0.01, 'patience': 10, 'min_delta': 1e-06}
+2024-12-06 23:47:00,298 INFO    MainThread:14688 [wandb_init.py:init():688] starting backend
+2024-12-06 23:47:00,298 INFO    MainThread:14688 [wandb_init.py:init():692] sending inform_init request
+2024-12-06 23:47:00,299 INFO    MainThread:14688 [backend.py:_multiprocessing_setup():104] multiprocessing start_methods=spawn, using: spawn
+2024-12-06 23:47:00,301 INFO    MainThread:14688 [wandb_init.py:init():705] backend started and connected
+2024-12-06 23:47:00,306 INFO    MainThread:14688 [wandb_run.py:_label_probe_notebook():1327] probe notebook
+2024-12-06 23:47:00,322 INFO    MainThread:14688 [wandb_run.py:_label_probe_notebook():1337] Unable to probe notebook: 'charmap' codec can't decode byte 0x81 in position 1877715: character maps to <undefined>
+2024-12-06 23:47:00,327 INFO    MainThread:14688 [wandb_init.py:init():798] updated telemetry
+2024-12-06 23:47:00,359 INFO    MainThread:14688 [wandb_init.py:init():830] communicating run to backend with 90.0 second timeout
+2024-12-06 23:47:00,556 INFO    MainThread:14688 [wandb_init.py:init():882] starting run threads in backend
+2024-12-06 23:47:00,866 INFO    MainThread:14688 [wandb_run.py:_console_start():2443] atexit reg
+2024-12-06 23:47:00,866 INFO    MainThread:14688 [wandb_run.py:_redirect():2293] redirect: wrap_raw
+2024-12-06 23:47:00,866 INFO    MainThread:14688 [wandb_run.py:_redirect():2358] Wrapping output streams.
+2024-12-06 23:47:00,867 INFO    MainThread:14688 [wandb_run.py:_redirect():2383] Redirects installed.
+2024-12-06 23:47:00,867 INFO    MainThread:14688 [wandb_init.py:init():925] run started, returning control to user process
+2024-12-06 23:51:56,002 INFO    MainThread:14688 [wandb_run.py:_finish():2169] finishing run epuls-university-of-rhode-island/shallow water prediction/o1wd541w
+2024-12-06 23:51:56,003 INFO    MainThread:14688 [wandb_run.py:_atexit_cleanup():2408] got exitcode: 0
+2024-12-06 23:51:56,003 INFO    MainThread:14688 [wandb_run.py:_restore():2390] restore
+2024-12-06 23:51:56,004 INFO    MainThread:14688 [wandb_run.py:_restore():2396] restore done
+2024-12-06 23:51:57,495 INFO    MainThread:14688 [wandb_run.py:_footer_history_summary_info():3951] rendering history
+2024-12-06 23:51:57,496 INFO    MainThread:14688 [wandb_run.py:_footer_history_summary_info():3983] rendering summary
+2024-12-06 23:51:57,502 INFO    MainThread:14688 [wandb_run.py:_footer_sync_info():3912] logging synced files

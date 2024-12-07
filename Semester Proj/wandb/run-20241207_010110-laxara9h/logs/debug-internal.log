@@ -1,0 +1,8 @@
+{"time":"2024-12-07T01:01:10.9401213-05:00","level":"INFO","msg":"using version","core version":"0.19.0"}
+{"time":"2024-12-07T01:01:10.9401213-05:00","level":"INFO","msg":"created symlink","path":"c:\\Users\\epuls\\OneDrive\\Desktop\\VSCode Homework\\Semester Proj\\wandb\\run-20241207_010110-laxara9h\\logs\\debug-core.log"}
+{"time":"2024-12-07T01:01:11.0476095-05:00","level":"INFO","msg":"created new stream","id":"laxara9h"}
+{"time":"2024-12-07T01:01:11.0476179-05:00","level":"INFO","msg":"stream: started","id":"laxara9h"}
+{"time":"2024-12-07T01:01:11.0476179-05:00","level":"INFO","msg":"writer: Do: started","stream_id":"laxara9h"}
+{"time":"2024-12-07T01:01:11.0476179-05:00","level":"INFO","msg":"sender: started","stream_id":"laxara9h"}
+{"time":"2024-12-07T01:01:11.0476179-05:00","level":"INFO","msg":"handler: started","stream_id":"laxara9h"}
+{"time":"2024-12-07T01:01:11.2624829-05:00","level":"INFO","msg":"Starting system monitor"}

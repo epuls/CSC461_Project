@@ -1,0 +1,11 @@
+Directories: ['/data_noise_b']
+Loading local directories: ['/data_noise_b']
+Concat directories:
+['/data_noise_b']
+Train size: 300 | Train shape: torch.Size([2, 256, 256])
+Validation size: 100 | Validation shape: torch.Size([2, 256, 256])
+Test size: 100 | Test shape: torch.Size([2, 256, 256])
+Training  with validation split
+Early stopping at epoch: 48
+Test Loss: 0.0012704776350541838268043
+Real World Test Loss: 0.0031538755249610295021412
