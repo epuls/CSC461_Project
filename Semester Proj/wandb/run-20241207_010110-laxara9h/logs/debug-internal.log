@@ -6,3 +6,5 @@
 {"time":"2024-12-07T01:01:11.0476179-05:00","level":"INFO","msg":"sender: started","stream_id":"laxara9h"}
 {"time":"2024-12-07T01:01:11.0476179-05:00","level":"INFO","msg":"handler: started","stream_id":"laxara9h"}
 {"time":"2024-12-07T01:01:11.2624829-05:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-12-07T01:08:56.6532793-05:00","level":"ERROR","msg":"HTTP error","status":404,"method":"POST","url":"https://api.wandb.ai/files/epuls-university-of-rhode-island/shallow%20water%20prediction/laxara9h/file_stream"}
+{"time":"2024-12-07T01:08:56.6532793-05:00","level":"ERROR+4","msg":"filestream: fatal error: filestream: failed to upload: 404 Not Found path=files/epuls-university-of-rhode-island/shallow water prediction/laxara9h/file_stream: {\"error\":\"run shallow water prediction/laxara9h not found while streaming file\"}"}

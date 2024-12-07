@@ -9,3 +9,14 @@
 2024-12-07 01:08:15,229 INFO    MainThread:14688 [wandb_init.py:init():645] wandb.init called with sweep_config: {}
 config: {'name': 'reduce_lr_on_plateau', 'architecture': 'UNet', 'batch_size': 32, 'learning_rate': 0.9, 'criterion': 'MSELoss', 'weight_decay': 0.01, 'patience': 5, 'min_delta': 1e-05, 'lr_scheduler': 'type', 'scheduler_params': {'mode': 'min', 'factor': 0.1, 'patience': 5, 'min_lr': 1e-06}}
 2024-12-07 01:08:15,229 INFO    MainThread:14688 [wandb_init.py:init():683] wandb.init() called when a run is still active
+2024-12-07 01:18:33,819 INFO    MainThread:14688 [wandb_setup.py:_flush():68] Current SDK version is 0.19.0
+2024-12-07 01:18:33,820 INFO    MainThread:14688 [wandb_setup.py:_flush():68] Configure stats pid to 14688
+2024-12-07 01:18:33,820 INFO    MainThread:14688 [wandb_setup.py:_flush():68] Loading settings from C:\Users\epuls\.config\wandb\settings
+2024-12-07 01:18:33,821 INFO    MainThread:14688 [wandb_setup.py:_flush():68] Loading settings from c:\Users\epuls\OneDrive\Desktop\VSCode Homework\Semester Proj\wandb\settings
+2024-12-07 01:18:33,821 INFO    MainThread:14688 [wandb_setup.py:_flush():68] Loading settings from environment variables
+2024-12-07 01:18:33,821 INFO    MainThread:14688 [wandb_init.py:_log_setup():528] Logging user logs to c:\Users\epuls\OneDrive\Desktop\VSCode Homework\Semester Proj\wandb\run-20241207_011833-0f8uyv41\logs\debug.log
+2024-12-07 01:18:33,822 INFO    MainThread:14688 [wandb_init.py:_log_setup():529] Logging internal logs to c:\Users\epuls\OneDrive\Desktop\VSCode Homework\Semester Proj\wandb\run-20241207_011833-0f8uyv41\logs\debug-internal.log
+2024-12-07 01:18:33,822 INFO    MainThread:14688 [wandb_init.py:init():639] calling init triggers
+2024-12-07 01:18:33,823 INFO    MainThread:14688 [wandb_init.py:init():645] wandb.init called with sweep_config: {}
+config: {'name': 'reduce_lr_on_plateau', 'architecture': 'UNet', 'batch_size': 16, 'learning_rate': 0.9, 'criterion': 'MSELoss', 'weight_decay': 0.01, 'patience': 1, 'min_delta': 1e-05, 'lr_scheduler': 'type', 'scheduler_params': {'mode': 'min', 'factor': 0.1, 'patience': 5, 'min_lr': 1e-06}}
+2024-12-07 01:18:33,823 INFO    MainThread:14688 [wandb_init.py:init():683] wandb.init() called when a run is still active
