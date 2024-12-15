@@ -1,0 +1,139 @@
+#pragma kernel InitializeHeights
+#pragma kernel LoadSimFromTexture
+#pragma kernel InitializeTerrainFromHeightmap
+#pragma kernel InitializeWaterFromHeightmap
+#pragma kernel FloodFillWater
+#pragma kernel GaussianFillWater
+#pragma kernel WaveFillWater
+#pragma kernel AddWaterWave
+#pragma kernel LoadSimWater
+#pragma kernel LoadSimTerrain
+
+#include "FluidSimCS.compute"
+
+RWTexture2D<float4> TerrainHeightmap;
+RWTexture2D<float4> WaterHeightmap;
+RWTexture2D<float4> LoadSimTex;
+
+//  For some reason having to re define this?
+//float terrainScale;
+
+[numthreads(32,32,1)]
+void InitializeHeights (uint3 id : SV_DispatchThreadID)
+{
+    //  DEPRACATED
+}
+
+[numthreads(32,32,1)]
+void LoadSimFromTexture (uint3 id : SV_DispatchThreadID)
+{
+    SimTex[id.xy] = LoadSimTex[id.xy];
+}
+
+[numthreads(32,32,1)]
+void InitializeTerrainFromHeightmap (uint3 id : SV_DispatchThreadID)
+{
+
+    int text_offset_x = 0;
+    int text_offset_y = 0;
+    uint2 tmp_id = id.xy;
+    
+    float height = TerrainHeightmap[id.xy].r * terrainScale;
+    SimTex[id.xy] = float4(SimTex[id.xy].xyz, height);
+}
+
+[numthreads(32,32,1)]
+void InitializeWaterFromHeightmap (uint3 id : SV_DispatchThreadID)
+{
+    SimTex[id.xy] = float4(SimTex[id.xy].xy, WaterHeightmap[id.xy].r, SimTex[id.xy].w);
+}
+
+[numthreads(32,32,1)]
+void FloodFillWater (uint3 id : SV_DispatchThreadID)
+{
+    float4 cur = SimTex[id.xy];
+    cur.z = 0.5f;
+    SimTex[id.xy] = cur;
+}
+
+[numthreads(32,32,1)]
+void GaussianFillWater (uint3 id : SV_DispatchThreadID)
+{
+    float4 cur = SimTex[id.xy];
+    float2 center = float2(resolution/2, resolution/2);
+    cur.z = distance(center,float2(id.x, id.y));
+    cur.z = 1 - (cur.z / resolution);
+    cur.z = min(cur.z, 1);
+    cur.z = smoothstep(0.85, 0.95, cur.z) * waveHeight;
+
+    cur.z = cur.z < epsilon ? epsilon : cur.z;
+    
+    SimTex[id.xy] = cur;
+}
+
+[numthreads(32,32,1)]
+void WaveFillWater (uint3 id : SV_DispatchThreadID)
+{
+    
+    float4 cur = SimTex[id.xy];
+    
+    if (id.x > waveOffsetX && id.x < waveSizeX + waveOffsetX)
+    {
+        if (id.y > waveOffsetY && id.y < waveSizeY + waveOffsetY)
+        {
+            
+            cur.x += waveVelX;
+            cur.y += waveVelY;
+            cur.z += waveHeight;
+            
+        }
+    }
+    //cur.z = cur.z < epsilon ? epsilon : cur.z;
+    
+    SimTex[id.xy] = cur;
+}
+
+[numthreads(32,32,1)]
+void AddWaterWave (uint3 id : SV_DispatchThreadID)
+{
+    //  NOT YET IMPLEMENTED
+    float4 cur = SimTex[id.xy];
+    cur.z = 0.5f;
+
+    float wave_offset_x = 0;
+    float wave_size_x = 50;
+    float wave_additional_x_vel = 0.0f;
+    float wave_offset_y = 10;
+    float wave_height = 0.75;
+    
+    if (id.x > wave_offset_x && id.x < wave_size_x + wave_offset_x)
+    {
+        if (id.y > wave_offset_y)
+        {
+            if(id.y < resolution - wave_offset_y)
+            {
+                cur.x += wave_additional_x_vel;
+                cur.z += wave_height;
+            }
+        }
+    }
+    cur.z = cur.z < epsilon ? epsilon : cur.z;
+    SimTex[id.xy] = cur;
+}
+
+[numthreads(32,32,1)]
+void LoadSimWater (uint3 id : SV_DispatchThreadID)
+{
+    float4 cur = SimTex[id.xy];
+    cur.z = LoadSimTex[id.xy].z;
+    SimTex[id.xy] = cur;
+}
+
+[numthreads(32,32,1)]
+void LoadSimTerrain (uint3 id : SV_DispatchThreadID)
+{
+    float4 cur = SimTex[id.xy];
+    cur.a = LoadSimTex[id.xy].w;
+    
+    SimTex[id.xy] = cur;
+}

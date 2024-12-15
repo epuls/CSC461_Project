@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e588f5c1bc7229a488c9a9ded39c2eea, type: 3}
+  m_Name: DefaultEqualizer
+  m_EditorClassIdentifier: 
+  _scaleFilters:
+  - type: 0
+    center: 0.61
+    value: 2
+    width: 1.14
+  _chopFilters:
+  - type: 2
+    center: 0.84
+    value: -0.41
+    width: 1.02
+  _displaySpectrum: {fileID: 11400000, guid: d238a6b059c0ce74da2b346a1c8eaf0b, type: 2}

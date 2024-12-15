@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34f256d9a8c8ee4439c9bb81033556e9, type: 3}
+  m_Name: LoadSimTest2
+  m_EditorClassIdentifier: 
+  ProfileName: LoadSimTest2
+  SimResolution: 256
+  DeltaTime: 0.05
+  StepsPerFrame: 10
+  Gravity: 9.86
+  MaxVelocityDampening: 0.25
+  TerrainHeightScale: 0.3
+  FillType: 0
+  TerrainType: 0
+  DefaultHeightmap: {fileID: 2800000, guid: cc5b28c092aaf4149b7322b82f1bac74, type: 3}
+  UpscaleSimTexResolution: 1024
+  UpscaleVfxTexResolution: 1024
+  SampleRate: 0
+  SampleEveryFrame: 0
+  ErosionScale: 0.00001
+  ErodeAfterSimSteps: 0
+  Alpha: 0.5
+  Beta: 2
+  Epsilon: 0.01
+  SimulationDisplacementScale: 1
+  DepthFadeDist: 1
+  ScrollingNormalStrength: 15
+  ScrollingStrengthScrollingNormals: 0.2
+  ScrollSpeedNorms: 2
+  MinWaterHeight: 0.01
+  FoamMinVelocity: 0.1
+  FoamSpeed: 1
+  FoamStep: 0.52
+  FoamStrength: 0.5
+  FoamRoughness: 0.1
+  FoamNormalScale: 8
+  FoamTiling: 3

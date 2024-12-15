@@ -1,0 +1,110 @@
+#pragma kernel HeightIntegration
+#pragma kernel VelocityIntegration
+#pragma kernel UpdateCurrentSimTextHeight
+#pragma kernel UpdateCurrentSimTextVelocity
+
+[numthreads(8,8,1)]
+void HeightIntegration (uint3 id : SV_DispatchThreadID)
+{
+    //r->l->t->b
+    float3 cur = SimTex[id.xy].xyz;
+    float3 r = Right(id, SimTex);
+    float3 l = Left(id, SimTex);
+    float3 t = Top(id, SimTex);
+    float3 b = Bottom(id, SimTex);
+
+    float hb0 = r.z;
+    float hb1 = l.z;
+    float hb2 = t.z;
+    float hb3 = b.z;
+
+    float p0 = hb0 * r.x;
+    float p1 = hb1 * cur.x;
+    float p2 = hb2 * t.y;
+    float p3 = hb3 * cur.y;
+
+    float tmp = ((-(p0 - p1 + p2 - p3) / dx) * dt);
+    tmp = max(0,tmp);
+    
+    float4 next = float4(SimTexNex[id.xy].xy, tmp, SimTexNex[id.xy].z);
+    
+    SimTexNex[id.xy] = next;
+}
+
+
+
+[numthreads(8,8,1)]
+void VelocityIntegration(uint3 id : SV_DispatchThreadID)
+{
+    float3 cur = SimTex[id.xy].xyz;
+    float3 r = Right(id, SimTex);
+    float3 l = Left(id, SimTex);
+    float3 t = Top(id, SimTex);
+    float3 b = Bottom(id, SimTex);
+
+    float p0 = r.z;
+    float p1 = cur.z;
+    float p2 = t.z;
+
+    //  Replace 0's with global force values
+    float u_next = SimTexNex[id.xy].x + (gdx * (p0 - p1) + 0) * dt;
+    float w_next = SimTexNex[id.xy].y + (gdx * (p2 - p1) + 0) * dt;
+    
+    
+    SimTexNex[id.xy] = float4(u_next, w_next, SimTex[id.xy].zw);
+}
+
+[numthreads(8,8,1)]
+void UpdateCurrentSimTextHeight(uint3 id : SV_DispatchThreadID)
+{
+    float3 cur = SimTex[id.xy];
+    float4 nexTex = float4(cur.x, cur.y, SimTexNex[id.xy].z, cur.w);
+    SimTex[id.xy] = nexTex;
+}
+
+
+[numthreads(8,8,1)]
+void UpdateCurrentSimTextVelocity(uint3 id : SV_DispatchThreadID)
+{
+    float3 cur = SimTex[id.xy];
+    float4 nexTex = float4(SimTexNex[id.xy].xy, cur.zw);
+    SimTex[id.xy] = nexTex;
+}
+
+float3 Top(uint2 id, RWTexture2D<float4> sampleTex)
+{
+    return sampleTex[uint2(id.x,id.y+1)].xyz;
+}
+float3 Bottom(uint2 id, RWTexture2D<float4> sampleTex)
+{
+    return sampleTex[uint2(id.x,id.y-1)].xyz;
+}
+float3 Left(uint2 id, RWTexture2D<float4> sampleTex)
+{
+    return sampleTex[uint2(id.x+1,id.y)].xyz;
+}
+float3 Right(uint2 id, RWTexture2D<float4> sampleTex)
+{
+    return sampleTex[uint2(id.x-1,id.y+1)].xyz;
+}
+
+/*
+float3 Top(uint2 id, RWTexture2D<float4> sampleTex)
+{
+    uint2 n_id = uint2(id.x, id.y+1);
+    // n_id.y = n_id.y <= resolution ? n_id.y : resolution;
+    return sampleTex[n_id].xyz;
+}
+float3 Bottom(uint2 id, RWTexture2D<float4> sampleTex)
+{
+    return sampleTex[uint2(id.x,id.y-1)].xyz;
+}
+float3 Left(uint2 id, RWTexture2D<float4> sampleTex)
+{
+    return sampleTex[uint2(id.x-1,id.y)].xyz;
+}
+float3 Right(uint2 id, RWTexture2D<float4> sampleTex)
+{
+    return sampleTex[uint2(id.x+1,id.y)].xyz;
+}
+*/

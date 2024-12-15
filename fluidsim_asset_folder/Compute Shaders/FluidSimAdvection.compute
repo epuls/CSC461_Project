@@ -1,0 +1,359 @@
+#pragma kernel VelocityAdvection_new
+#pragma kernel VelocityAdvection_Fallback
+#pragma kernel VelocityAdvection_Forward
+#pragma kernel VelocityAdvection_Backward
+#pragma kernel ErrorCorrection
+
+#include "FluidSimCS.compute"
+
+
+[numthreads(32,32,1)]
+void VelocityAdvection_new(uint3 id : SV_DispatchThreadID)
+{
+    //  NOTE: This is semi-lagrangian. Run this forward in time, then backward in time, compare to original pos, and apply
+    //  error difference to originally forward advected values. Will improve stability.
+    //  (See unconditionally stable Maccormick method/Back and forth error correction)
+    // Backtrace position for u component
+
+    // Fallback that writes to diff tex, same as above
+
+    float4 cur = SimTex[id.xy];
+    float x_u = (float)id.x + 0.5;
+    float y_u = (float)id.y;
+
+    // Sample velocities at (x_u, y_u)
+    float v_u = SampleV(x_u, y_u, resolution, SimTex);
+    
+    float2 prev_u = float2(x_u, y_u) - float2(cur.x, v_u) * dt/dx;
+    
+    
+    // Sample fluid height at backtraced position. Creates dripping effect, disable for accuracy
+    float h_prev_u = SampleHeight(prev_u.x, prev_u.y);
+
+    // If fluid height at backtraced position is below threshold, set u_new to zero
+    float u_new = SampleU(prev_u.x, prev_u.y, resolution, SimTex);
+    u_new = h_prev_u > epsilon ? u_new : 0;
+    
+    // Backtrace position for v component
+    float x_v = (float)id.x;
+    float y_v = (float)id.y + 0.5;
+
+    // Sample velocities at (x_v, y_v)
+    float u_v = SampleU(x_v, y_v, resolution, SimTex);
+    
+
+    float2 prev_w = float2(x_v, y_v) - float2(u_v, cur.y) * dt/dx;
+    
+    // Sample fluid height at backtraced position
+    float h_prev_v = SampleHeight(prev_w.x, prev_w.y);
+
+    // If fluid height at backtraced position is below threshold, set v_new to zero
+    float v_new = SampleV(prev_w.x, prev_w.y, resolution, SimTex);
+    v_new = h_prev_v > epsilon ? v_new : 0;
+    
+    // Update SimTexNex while preserving other components
+    cur.x = u_new;
+    cur.y = v_new;
+
+    //  Prevent outflow from empty cells and inflow from empty cells
+    float4 r = Right(id, SimTex, resolution);
+    float4 t = Top(id, SimTex, resolution);
+    cur.x = (cur.x < 0 && r.z < epsilon) ? 0 : cur.x;
+    cur.x = (cur.x > 0 && cur.z < epsilon) ? 0 : cur.x;
+    cur.y = (cur.y < 0 && t.z < epsilon) ? 0 : cur.y;
+    cur.y = (cur.y > 0 && cur.z < epsilon) ? 0 : cur.y;
+    
+    SimTexNex[id.xy] = cur;
+}
+
+[numthreads(32,32,1)]
+void VelocityAdvection_Fallback(uint3 id : SV_DispatchThreadID)
+{
+    //  NOTE: This is semi-lagrangian. Run this forward in time, then backward in time, compare to original pos, and apply
+    //  error difference to originally forward advected values. Will improve stability.
+    //  (See unconditionally stable Maccormick method/Back and forth error correction)
+    // Backtrace position for u component
+
+    // Fallback that writes to diff tex, same as above
+
+    float4 cur = SimTex[id.xy];
+    float x_u = (float)id.x + 0.5;
+    float y_u = (float)id.y;
+
+    // Sample velocities at (x_u, y_u)
+    float v_u = SampleV(x_u, y_u, resolution, SimTex);
+    
+    float2 prev_u = float2(x_u, y_u) - float2(cur.x, v_u) * dt/dx;
+    
+    
+    // Sample fluid height at backtraced position. Creates dripping effect, disable for accuracy
+    float h_prev_u = SampleHeight(prev_u.x, prev_u.y);
+
+    // If fluid height at backtraced position is below threshold, set u_new to zero
+    float u_new = SampleU(prev_u.x, prev_u.y, resolution, SimTex);
+    u_new = h_prev_u > epsilon ? u_new : 0;
+    
+    // Backtrace position for v component
+    float x_v = (float)id.x;
+    float y_v = (float)id.y + 0.5;
+
+    // Sample velocities at (x_v, y_v)
+    float u_v = SampleU(x_v, y_v, resolution, SimTex);
+    
+
+    float2 prev_w = float2(x_v, y_v) - float2(u_v, cur.y) * dt/dx;
+    
+    // Sample fluid height at backtraced position
+    float h_prev_v = SampleHeight(prev_w.x, prev_w.y);
+
+    // If fluid height at backtraced position is below threshold, set v_new to zero
+    float v_new = SampleV(prev_w.x, prev_w.y, resolution, SimTex);
+    v_new = h_prev_v > epsilon ? v_new : 0;
+    
+    // Update SimTexNex while preserving other components
+    cur.x = u_new;
+    cur.y = v_new;
+
+    //  Prevent outflow from empty cells and inflow from empty cells
+    float4 r = Right(id, SimTex, resolution);
+    float4 t = Top(id, SimTex, resolution);
+    cur.x = (cur.x < 0 && r.z < epsilon) ? 0 : cur.x;
+    cur.x = (cur.x > 0 && cur.z < epsilon) ? 0 : cur.x;
+    cur.y = (cur.y < 0 && t.z < epsilon) ? 0 : cur.y;
+    cur.y = (cur.y > 0 && cur.z < epsilon) ? 0 : cur.y;
+    
+    SimTexLagrange[id.xy] = cur;
+}
+
+[numthreads(32,32,1)]
+void VelocityAdvection_Forward(uint3 id : SV_DispatchThreadID)
+{
+    // Compute positions for sampling
+    float4 cur = SimTex[id.xy];
+    float x_u = (float)id.x + 0.5;
+    float y_u = (float)id.y;
+    float x_v = (float)id.x;
+    float y_v = (float)id.y + 0.5;
+
+    // Sample velocities at (x_u, y_u) and (x_v, y_v)
+    float v_u = SampleV(x_u, y_u, resolution, SimTex);
+    float u_v = SampleU(x_v, y_v, resolution, SimTex);
+
+    // Backtrace positions
+    float2 prev_w = float2(x_v, y_v) + float2(u_v, cur.y) * dt/dx;
+    float2 prev_u = float2(x_u, y_u) + float2(cur.x, v_u) * dt/dx;
+
+    // Sample updated velocities
+    float u_new = SampleU(prev_u.x, prev_u.y, resolution, SimTex);
+    float v_new = SampleV(prev_w.x, prev_w.y, resolution, SimTex);
+
+    // Sample fluid heights and apply thresholding
+    float h_prev_u = SampleHeight(prev_u.x, prev_u.y);
+    float h_prev_v = SampleHeight(prev_w.x, prev_w.y);
+    u_new = h_prev_u > epsilon ? u_new : 0;
+    v_new = h_prev_v > epsilon ? v_new : 0;
+    
+    // Update the velocity components
+    cur.x = u_new;
+    cur.y = v_new;
+
+    //  Prevent outflow from empty cells and inflow from empty cells
+    float4 r = Right(id, SimTex, resolution);
+    float4 t = Top(id, SimTex, resolution);
+    cur.x = (cur.x < 0 && r.z < epsilon) ? 0 : cur.x;
+    cur.x = (cur.x > 0 && cur.z < epsilon) ? 0 : cur.x;
+    cur.y = (cur.y < 0 && t.z < epsilon) ? 0 : cur.y;
+    cur.y = (cur.y > 0 && cur.z < epsilon) ? 0 : cur.y;
+
+    // Write to SimTexNex
+    SimTexNex[id.xy] = cur;
+}
+
+[numthreads(32,32,1)]
+void VelocityAdvection_Backward(uint3 id : SV_DispatchThreadID)
+{
+    float4 cur = SimTexNex[id.xy];
+
+    // Compute positions for sampling
+    float x_u = (float)id.x + 0.5f;
+    float y_u = (float)id.y;
+    float x_v = (float)id.x;
+    float y_v = (float)id.y + 0.5f;
+
+    // Sample velocities at (x_u, y_u) and (x_v, y_v)
+    float v_u = SampleV(x_u, y_u, resolution, SimTexNex);
+    float u_v = SampleU(x_v, y_v, resolution, SimTexNex);
+
+    // Backtrace positions
+    float2 prev_u = float2(x_u, y_u) - float2(cur.x, v_u) * (dt / dx);
+    float2 prev_w = float2(x_v, y_v) - float2(u_v, cur.y) * (dt / dx);
+
+    // Sample updated velocities
+    float u_new = SampleU(prev_u.x, prev_u.y, resolution, SimTexNex);
+    float v_new = SampleV(prev_w.x, prev_w.y, resolution, SimTexNex);
+
+    // Sample fluid heights and apply thresholding
+    float h_prev_u = SampleHeight(prev_u.x, prev_u.y);
+    float h_prev_v = SampleHeight(prev_w.x, prev_w.y);
+    u_new = (h_prev_u > epsilon) ? u_new : 0.0f;
+    v_new = (h_prev_v > epsilon) ? v_new : 0.0f;
+
+    // Update the velocity components
+    cur.x = u_new;
+    cur.y = v_new;
+
+    // Prevent outflow from or inflow into empty cells
+    float4 r = Right(id, SimTexNex, resolution);
+    float4 t = Top(id, SimTexNex, resolution);
+    cur.x = (cur.x < 0.0f && r.z < epsilon) ? 0.0f : cur.x;
+    cur.x = (cur.x > 0.0f && cur.z < epsilon) ? 0.0f : cur.x;
+    cur.y = (cur.y < 0.0f && t.z < epsilon) ? 0.0f : cur.y;
+    cur.y = (cur.y > 0.0f && cur.z < epsilon) ? 0.0f : cur.y;
+
+    // Write the updated values to SimTexPrev
+    SimTexPrev[id.xy] = cur;
+}
+
+
+[numthreads(32,32,1)]
+void ErrorCorrection(uint3 id : SV_DispatchThreadID)
+{
+    /*
+    // Apply error correction only if the current cell has sufficient mass/height
+    float4 cur = SimTexNex[id.xy];
+    if (cur.z <= epsilon)
+    {
+        cur.xy = float2(0,0);
+        SimTexNex[id.xy] = cur;
+        return;
+    }
+    
+    // Assume current cell data is in 'cur', and we’re working with velocity stored in cur.xy
+    bool isNearTerrain = false;
+    int2 offsets[4] = { int2(1, 0), int2(0, 1), int2(-1, 0), int2(0, -1) };
+
+    // Check if the cell is adjacent to terrain (dry cell)
+    for (int i = 0; i < 4; i++) {
+        int2 neighborPos = id.xy + offsets[i];
+
+        // Ensure neighbor is within bounds
+        if (neighborPos.x >= 0 && neighborPos.y >= 0 && neighborPos.x < resolution && neighborPos.y < resolution) {
+            float4 neighbor = SimTex[neighborPos]; // Fetch neighboring cell data
+
+            // If a neighboring cell has no water, mark this cell as near terrain
+            if (neighbor.z < epsilon) {
+                isNearTerrain = true;
+                break;
+            }
+        }
+    }
+
+    // Calculate velocity magnitude and adaptive error constant
+    float velocityMagnitude = length(SimTex[id.xy].xy);
+    float maxVelocity = alpha / dt;
+    // Velocity based error tolerance
+    float scalingFactor = clamp(abs(velocityMagnitude / maxVelocity), 0.1f, 1.0f);
+    float maxErrorThreshold = 1.0f * scalingFactor;
+    maxErrorThreshold = isNearTerrain ? 0.01f : maxErrorThreshold;
+    
+
+    // Compute error vector and check for unphysical flow
+    float2 error = SimTexPrev[id.xy].xy - SimTex[id.xy].xy;
+    
+    
+    if (max(abs(error.x), abs(error.y)) > maxErrorThreshold) {
+        // If error is too large or unphysical, revert to the original semi-Lagrangian value
+        SimTexNex[id.xy] = SimTexLagrange[id.xy];
+        return;
+    }
+
+    // EXPERIMENTS TO PERFORM:
+    
+    float errorDampingCoefficient = 1.0f;//0.5f;
+    error *= errorDampingCoefficient; // ERROR DAMPING
+    //error = isNearTerrain ? 0 : error;
+    
+    // Apply the error correction
+    cur = SimTexNex[id.xy];
+    //cur.xy = lerp(cur.xy, cur.xy + error, 0.9f); // TEMPORAL AVERAGING
+    cur.xy = cur.z > epsilon ? cur.xy + error : float2(0,0);
+    //if (isNearTerrain) cur.xy = lerp(cur.xy, cur.xy + error, 0.5f);
+    SimTexNex[id.xy] = cur;
+    */
+
+    // Fetch the current cell data and check for low mass/height
+    
+    
+    // Check if the cell is adjacent to terrain (dry cell)
+    bool isNearTerrain = false;
+    int2 offsets[4] = { int2(1, 0), int2(0, 1), int2(-1, 0), int2(0, -1) };
+    for (int i = 0; i < 4; i++) {
+        int2 neighborPos = id.xy + offsets[i];
+        if (neighborPos.x >= 0 && neighborPos.y >= 0 && neighborPos.x < resolution && neighborPos.y < resolution) {
+            float4 neighbor = SimTex[neighborPos];
+            if (neighbor.z < epsilon) {
+                isNearTerrain = true;
+                break;
+            }
+        }
+    }
+
+    /*
+    // Calculate adaptive error threshold based on velocity magnitude and proximity to terrain
+    float velocityMagnitude = length(SimTex[id.xy].xy);
+    float maxVelocity = alpha / dt;
+    float scalingFactor = clamp(abs(velocityMagnitude / maxVelocity), 0.00001f, 1.0f);
+    //float scalingFactor = abs(velocityMagnitude / maxVelocity);
+
+
+    float errorCoefficient = velocityMagnitude >= ((0.95) * maxVelocity) ? 10.0f : 0.001f;
+    float terrainErrorCoefficient = pow(errorCoefficient, 1);
+    float maxErrorThreshold = isNearTerrain ? scalingFactor * terrainErrorCoefficient : scalingFactor * errorCoefficient;
+    //float maxErrorThreshold = scalingFactor * errorCoefficient;
+    */
+
+    float v = length(SimTexNex[id.xy]); // Current velocity magnitude
+    float v_max = 0.95f * (alpha / dt);        // Max expected velocity
+    float baseErrorTolerance = 0.00001;  // Minimum error tolerance
+    float maxErrorTolerance = 1.0;    // Max error tolerance at high velocity
+    float sharpness = 5.0;    // Controls the steepness of the exponential increase
+    float errorTolerance = baseErrorTolerance + (maxErrorTolerance - baseErrorTolerance) * pow(v / v_max, sharpness);
+
+
+    // Compute the error vector
+    float2 error = SimTexPrev[id.xy].xy - SimTex[id.xy].xy;
+
+    // If error exceeds the threshold, fall back to the semi-Lagrangian value
+    if (max(abs(error.x), abs(error.y)) > errorTolerance) {
+        //float tmp = SimTexLagrange[id.xy];
+        SimTexNex[id.xy] = SimTexLagrange[id.xy];
+        //tmp.a = 1;
+        //SimTexPrev[id.xy] = tmp;
+        return;
+    }
+
+    // Apply error damping for smoother correction
+    float errorDampingCoefficient = 1.0f; // Adjust as needed
+    error *= errorDampingCoefficient;
+
+    // Apply the error correction with temporal averaging if desired
+    float4 cur = SimTexNex[id.xy];
+    
+    cur.xy = lerp(cur.xy, cur.xy + error, 1.0f);
+
+    float4 r = Right(id, SimTexNex, resolution);
+    float4 t = Top(id, SimTexNex, resolution);
+    //cur.x = (cur.x < 0 && r.z < epsilon) ? 0 : cur.x;
+    //cur.x = (cur.x > 0 && cur.z < epsilon) ? 0 : cur.x;
+    //cur.y = (cur.y < 0 && t.z < epsilon) ? 0 : cur.y;
+    //cur.y = (cur.y > 0 && cur.z < epsilon) ? 0 : cur.y;
+    
+    SimTexNex[id.xy] = cur;
+    
+    cur.a = 1;
+    SimTexLagrange[id.xy] = cur;
+    
+
+}
+
+

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7af9cad64ea6f104b9cfb6255cf0eb5e, type: 3}
+  m_Name: LeftCenterFull2048
+  m_EditorClassIdentifier: 
+  profileName: LeftCenterFull2048
+  waveOffsetX: 0
+  waveOffsetY: 0
+  waveSizeX: 102.6
+  waveSizeY: 2048
+  waveVelX: 0
+  waveVelY: 0
+  waveHeight: 20

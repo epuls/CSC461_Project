@@ -1,0 +1,53 @@
+#pragma kernel AddGlobalWindVelocity
+#pragma kernel AddWindVelocityFromTexture
+#pragma kernel AddWindVelocityFromMaterialTexture
+#pragma kernel ApplyWindVelocity
+
+#include "FluidSimCS.compute"
+
+//  TEXTURES
+//  ----------- WIND
+RWTexture2D<float4> WindTex;
+RWTexture2D<float4> WindMaterialTexSource;
+RWTexture2D<float4> WindTexSource;
+
+
+//  PARAMS
+//  ----------- WIND
+float2 globalWind;
+float textureScale;
+float matTextureScale;
+
+[numthreads(32,32,1)]
+void AddGlobalWindVelocity (uint3 id : SV_DispatchThreadID)
+{
+    WindTex[id.xy] = float4(globalWind,0,0);
+}
+
+[numthreads(32,32,1)]
+void AddWindVelocityFromTexture (uint3 id : SV_DispatchThreadID)
+{
+    float2 winds = WindTexSource[id.xy].xy * textureScale;
+    WindTex[id.xy] = float4(winds, 0, 0);
+}
+
+[numthreads(32,32,1)]
+void AddWindVelocityFromMaterialTexture (uint3 id : SV_DispatchThreadID)
+{
+    float2 winds = WindMaterialTexSource[id.xy].xy * matTextureScale;
+    WindTex[id.xy] = float4(winds, 0, 0);
+}
+
+[numthreads(32,32,1)]
+void ApplyWindVelocity (uint3 id : SV_DispatchThreadID)
+{
+    float2 curWind = WindTex[id.xy].xy;
+    float4 curSim = SimTex[id.xy];
+    curSim.x += curWind.x;
+    curSim.y += curWind.y;
+
+    SimTex[id.xy] = curSim;
+    WindTex[id.xy] = float4(0,0,0,0);
+}
+
+

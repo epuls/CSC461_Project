@@ -1,0 +1,52 @@
+#pragma kernel HeightIntegration_new
+
+#include "FluidSimCS.compute"
+
+// Last step of simulation, so setting normals here
+[numthreads(32,32,1)]
+void HeightIntegration_new (uint3 id : SV_DispatchThreadID)
+{
+    //r->l->t->b
+    float4 cur = SimTex[id.xy];
+    
+    
+    float4 r = Right(id, SimTex, resolution);
+    float4 l = Left(id, SimTex);
+    float4 t = Top(id, SimTex, resolution);
+    float4 b = Bottom(id, SimTex);
+    float rz = r.z > epsilon ? r.z : 0;
+    float lz = l.z > epsilon ? l.z : 0;
+    float tz = t.z > epsilon ? t.z : 0;
+    float bz = b.z > epsilon ? b.z : 0;
+    
+    
+    float hb0 = cur.x <= 0 ? rz : cur.z;
+    float hb1 = l.x >= 0 ? lz : cur.z;
+    float hb2 = cur.y <= 0 ? tz : cur.z;
+    float hb3 = b.y >= 0 ? bz : cur.z;  
+    
+    float p0 = hb0 * cur.x;
+    float p1 = hb1 * l.x;
+    float p2 = hb2 * cur.y;
+    float p3 = hb3 * b.y;
+
+    //  Beta clamping ------
+    float h_avgmax = beta * (dx / (g * dt));
+    float h_adj = max(0,((r.z + l.z + t.z + b.z) / 4)-h_avgmax);
+
+    h_adj = max(0, h_adj - h_avgmax);
+    p0 -= h_adj;
+    p1 -= h_adj;
+    p2 -= h_adj;
+    p3 -= h_adj;
+    //  --------------------
+    
+    float tmp = cur.z - (((p0 - p1 + p2 - p3) / dx) * dt);
+    tmp = max(0,tmp);
+    
+    float4 next = float4(SimTex[id.xy].xy, tmp, SimTex[id.xy].w);
+    
+    SimTexNex[id.xy] = next;
+    NormalsTex[id.xy] = SimTexNex[id.xy].xzyw;
+    
+}

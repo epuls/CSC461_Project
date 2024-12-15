@@ -1,0 +1,62 @@
+#pragma kernel VelocityIntegration_new
+#include "FluidSimCS.compute"
+
+
+[numthreads(32,32,1)]
+void VelocityIntegration_new(uint3 id : SV_DispatchThreadID)
+{
+    float testErosionCoefficient;
+    float4 cur = SimTex[id.xy];
+    float4 r = Right(id, SimTex, resolution);
+    float4 t = Top(id, SimTex, resolution);
+    
+    
+
+    //cur.z = cur.z < epsilon ? 0 : cur.z;
+    //cur.xy = cur.z < epsilon ? 0 : cur.xy;
+    cur.x = (cur.x < 0 && r.z < epsilon) ? 0 : cur.x;
+    cur.x = (cur.x > 0 && cur.z < epsilon) ? 0 : cur.x;
+    cur.y = (cur.y < 0 && t.z < epsilon) ? 0 : cur.y;
+    cur.y = (cur.y > 0 && cur.z < epsilon) ? 0 : cur.y;
+    
+    float p0 = r.z + r.w;
+    float p1 = cur.z + cur.w;
+    float p2 = t.z + t.w;
+
+    // TODO: Add local force values from texture
+    float u_next = SimTex[id.xy].x + ((gdx * (p0 - p1) + globalForce.x) * dt);
+    float w_next = SimTex[id.xy].y + ((gdx * (p2 - p1) + globalForce.y) * dt);
+
+    
+    //  Alpha clamping -------------
+    u_next = min(u_next, alpha/dt);
+    w_next = min(w_next, alpha/dt);
+    int sign = cur.x > 0 ? 1 : -1;
+    u_next = abs(cur.x) > alpha / dt ? (alpha/dt) * sign : u_next;
+
+    sign = cur.y > 0 ? 1 : -1;
+    w_next = abs(cur.y) > alpha / dt ? (alpha / dt) * sign : w_next;
+    //------------------------------
+    
+
+    float maxDamp = max(0, 1 - vd * dt);
+    float minDamp = max(0, 1 - (vd/100) * dt);
+    // Compute a depth-based damping factor
+    float hThreshold = 0.01;
+    float exponent = 2;
+    float heightFactor = clamp(1.0f - pow(cur.z / hThreshold, exponent), 0.0f, 1.0f);
+
+    // Compute the final dampening factor
+    float heightScaledDamp = minDamp + (maxDamp - minDamp) * heightFactor;
+    float damp = heightScaledDamp;
+    
+    u_next *= (damp);
+    w_next *= (damp);
+    //u_next = SimTex[id.xy].z > epsilon ? u_next : 0;
+    //w_next = SimTex[id.xy].z > epsilon ? w_next : 0;
+
+    
+    
+    SimTexNex[id.xy] = float4(u_next, w_next, SimTex[id.xy].zw);
+    
+}

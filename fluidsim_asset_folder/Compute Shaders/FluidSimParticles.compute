@@ -1,0 +1,113 @@
+#pragma kernel CalculateBreakingWaves
+#pragma kernel ExtendBreakingWaves
+#pragma kernel CalculateWaveParticleData
+
+#include "FluidSimCS.compute"
+
+struct ParticleData
+{
+    float3 position;
+    float3 velocity;
+};
+
+AppendStructuredBuffer<ParticleData> ParticleBuffer;
+
+[numthreads(32,32,1)]
+void CalculateBreakingWaves(uint3 id : SV_DispatchThreadID)
+{
+
+    float th = waveThresholdCoefficient;
+    
+    float4 cur = SimTex[id.xy];
+    float4 r = Right(id, SimTex, resolution);
+    float4 l = Left(id, SimTex);
+    float4 t = Top(id, SimTex, resolution);
+    float4 b = Bottom(id, SimTex);
+
+    float2 gradH = float2(r.b - l.b, t.b - b.b)/2;
+    float2 u = float2(cur.xy);
+
+    float2 steepness = dot(gradH, u);
+
+    steepness = abs(gradH) > th && steepness < 0 ? steepness : float2(0,0);
+    
+    WaveVfxTex[id.xy] = float4(abs(steepness), 0, 0);
+    //WaveVfxTex[id.xy] = float4(steepness, 0, 0);
+}
+
+[numthreads(32,32,1)]
+void ExtendBreakingWaves(uint3 id : SV_DispatchThreadID)
+{
+    
+    float4 cur = WaveVfxTex[id.xy];
+    float4 r = Right(id, WaveVfxTex, resolution);
+    float4 l = Left(id, WaveVfxTex);
+    float4 t = Top(id, WaveVfxTex, resolution);
+    float4 b = Bottom(id, WaveVfxTex);
+    if (cur.x == 0 || cur.y == 0)
+    {
+        if (r.x > 0 || r.y > 0)
+        {
+            cur.xy = 1;
+            WaveVfxTex[id.xy] = cur;
+            LineTex[id.xy] = cur;
+            return;
+        }
+
+        if (l.x > 0 || l.y > 0)
+        {
+            cur.xy = 1;
+            WaveVfxTex[id.xy] = cur;
+            LineTex[id.xy] = cur;
+            return;
+        }
+
+        if(t.x > 0 || t.y > 0)
+        {
+            cur.xy = 1;
+            WaveVfxTex[id.xy] = cur;
+            LineTex[id.xy] = cur;
+            return;
+        }
+
+        if (b.x > 0 || b.y > 0)
+        {
+            cur.xy = 1;
+            WaveVfxTex[id.xy] = cur;
+            LineTex[id.xy] = cur;
+            return;
+        }
+        return;
+    }
+    cur.xy = 1;
+    
+    LineTex[id.xy] = cur;
+}
+
+[numthreads(32,32,1)]
+void CalculateWaveParticleData (uint3 id : SV_DispatchThreadID)
+{
+    float4 steepness = WaveVfxTex[id.xy];
+
+    if (steepness.x == 0)
+    {
+        LineTex[id.xy] = float4(0,0,0,0);
+        return;
+    }
+    
+    ParticleData data;
+    float4 cur = SimTex[id.xy];
+    float4 rand = RandomTex[id.xy];
+    // Initialize particle data based on texture value
+    float x = (id.x * gridSize) / resolution;
+    float y = ((cur.z + cur.w) * displacementScale) - epsilon;
+    float z = (id.y * gridSize) / resolution;
+        
+    data.position = float3(x + rand.x, y, z+rand.z);
+    data.velocity = float3(cur.x, 0, cur.y);
+
+    // Append the particle data to the buffer
+    ParticleBuffer.Append(data);
+    //LineTex[id.xy] = cur;
+    
+}

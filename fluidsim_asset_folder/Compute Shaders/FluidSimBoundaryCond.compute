@@ -1,0 +1,43 @@
+#pragma kernel AbsorbBoundary_new
+
+#include "FluidSimCS.compute"
+
+[numthreads(32,32,1)]
+void AbsorbBoundary_new(uint3 id : SV_DispatchThreadID)
+{
+    float4 cur = SimTex[id.xy];
+    int dampSize = 1;
+    //float dampRate = 1 - (1/dampSize);
+    
+    float dampRate = max(1 - (1*abs(cur.x / dampSize)), 1 - (1*abs(cur.y / dampSize)));
+    dampRate = max(0, dampRate);
+    if(id.x <= dampSize || id.x >= resolution - 1 - dampSize)
+    {
+        
+        cur.x *= dampRate;
+        cur.y *= dampRate;
+        
+
+        if (id.x == 0 || id.x == resolution - 1)
+        {
+            cur.x = 0;
+            cur.y = 0;
+        }
+    }
+
+    if(id.y <= dampSize || id.y >= resolution - 1 - dampSize)
+    {
+        
+        cur.x *= dampRate;
+        cur.y *= dampRate;
+
+        if (id.x == 0 || id.x == resolution - 1)
+        {
+            cur.x = 0;
+            cur.y = 0;
+        }
+        
+    }
+    
+    SimTex[id.xy] = cur;
+}

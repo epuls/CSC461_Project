@@ -1,0 +1,151 @@
+#pragma kernel UpdateCurrentSimTextHeight
+#pragma kernel UpdateCurrentSimTextVelocity
+#pragma kernel CorrectWaterTerrainDisplacement
+
+
+
+#include "Assets/fluidsim/Compute Shaders/fluid_sim_utility.cginc"
+
+//  ##############  Input/Output buffers  ################
+
+
+//  ##############  Simulation Textures  #################
+RWTexture2D<float4> SimTexPrev;
+RWTexture2D<float4> SimTex;
+RWTexture2D<float4> SimTexNex;
+RWTexture2D<float4> SimTexLagrange;
+RWTexture2D<float4> SimTexVfx;
+RWTexture2D<float4> ProcessedSimTex;
+RWTexture2D<float4> WaveVfxTex;
+RWTexture2D<float4> LineTex;
+RWTexture2D<float4> RandomTex;
+RWTexture2D<float4> NormalsTex;
+
+//  ##############  Base Properties  #####################
+uint resolution;
+float dt;
+float dx;
+float g;
+float gdx;
+float2 globalForce;
+float vd;
+float erosionCoefficient;
+float terrainScale;
+float gridSize;
+float displacementScale;
+float waveThresholdCoefficient;
+
+
+//  ##############  Stability Properties  ################
+float alpha;
+float beta;
+float epsilon;
+
+bool useBFFEC;
+
+//  ##############  Wave Properties  ################
+float waveHeight;
+
+float waveOffsetX;
+float waveOffsetY;
+
+float waveSizeX;
+float waveSizeY;
+
+float waveVelX;
+float waveVelY;
+
+
+float SampleHeight(float x, float y)
+{
+    float res = float(resolution);
+    float x0 = floor(x);
+    float y0 = floor(y);
+    float x1 = x0 + 1.0;
+    float y1 = y0 + 1.0;
+
+    float sx = x - x0;
+    float sy = y - y0;
+
+    // Clamp indices
+    x0 = clamp(x0, 0.0, res - 1.0);
+    x1 = clamp(x1, 0.0, res - 1.0);
+    y0 = clamp(y0, 0.0, res - 1.0);
+    y1 = clamp(y1, 0.0, res - 1.0);
+
+    uint ix0 = (uint)x0;
+    uint ix1 = (uint)x1;
+    uint iy0 = (uint)y0;
+    uint iy1 = (uint)y1;
+
+    // Read height values at four corners from SimTex
+    float h00 = SimTex[uint2(ix0, iy0)].z;
+    float h10 = SimTex[uint2(ix1, iy0)].z;
+    float h01 = SimTex[uint2(ix0, iy1)].z;
+    float h11 = SimTex[uint2(ix1, iy1)].z;
+
+    // Bilinear interpolation
+    float h0 = lerp(h00, h10, sx);
+    float h1 = lerp(h01, h11, sx);
+    float h = lerp(h0, h1, sy);
+    return h;
+}
+
+
+
+[numthreads(32,32,1)]
+void UpdateCurrentSimTextHeight(uint3 id : SV_DispatchThreadID)
+{
+    float4 cur = SimTex[id.xy];
+    float4 nexTex = float4(cur.x, cur.y, SimTexNex[id.xy].zw);
+    SimTex[id.xy] = nexTex;
+}
+
+[numthreads(32,32,1)]
+void UpdateCurrentSimTextVelocity(uint3 id : SV_DispatchThreadID)
+{
+    float4 cur = SimTex[id.xy];
+    float4 nexTex = float4(SimTexNex[id.xy].xy, cur.zw);
+    SimTex[id.xy] = nexTex;
+}
+
+[numthreads(32,32,1)]
+void CorrectWaterTerrainDisplacement(uint3 id : SV_DispatchThreadID)
+{
+    float4 cur = SimTex[id.xy];
+    float4 r = Right(id, SimTex, resolution);
+    float4 l = Left(id, SimTex);
+    float4 t = Top(id, SimTex, resolution);
+    float4 b = Bottom(id, SimTex);
+    float4 tmp = SimTex[id.xy];
+    float scale = 1;
+    float rg = scale*(r.w-cur.w);
+    float lg = scale*(l.w-cur.w);
+    float tg = scale*(t.w-cur.w);
+    float bg = scale*(b.w-cur.w);
+    tmp.xyz = 0;
+    
+
+    float min_height = min(r.z,l.z);
+    min_height = min(min_height, t.z);
+    min_height = min(min_height, b.z);
+    
+    
+    if (min_height <= epsilon)
+    {
+        if(cur.z >= epsilon)
+        {
+            float g_tmp = max(rg,lg);
+            g_tmp = max(g_tmp,tg);
+            g_tmp = max(g_tmp,bg);
+            tmp.b = g_tmp;
+        } 
+    }
+
+    SimTexVfx[id.xy] = tmp;
+}
+
+
+
+
+

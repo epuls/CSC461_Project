@@ -1,0 +1,184 @@
+#pragma kernel LaplacianSmoothing
+#pragma kernel Gaussian
+#pragma kernel GaussianAndDoGProcessing
+
+
+#include "FluidSimCS.compute"
+
+
+
+[numthreads(32,32,1)]
+void LaplacianSmoothing (uint3 id : SV_DispatchThreadID)
+{
+    float4 cur = SimTex[id.xy];
+    float4 l = Left(id.xy, SimTex);
+    float4 r = Right(id.xy, SimTex, resolution);
+    float4 t = Top(id.xy, SimTex, resolution);
+    float4 b = Bottom(id.xy, SimTex);
+
+    ProcessedSimTex[id.xy] = (l + r + t + b - 4.0f * cur) * 0.25 + cur;
+}
+
+
+# define KERNEL_SIZE 5
+# define KERNEL_SIZE_M 13
+# define KERNEL_SIZE_L 21
+
+// Function to apply Gaussian blur to a given pixel position
+float4 GaussianBlurS(uint2 coord, RWTexture2D<float4> tex, uint2 resolution, float sigma)
+{
+    float kern[KERNEL_SIZE];
+    float sum = 0.0f;
+    int halfSize = KERNEL_SIZE / 2;
+
+    // Calculate Gaussian kernel values
+    for (int i = -halfSize; i <= halfSize; i++)
+    {
+        float exponent = -(i * i) / (2 * sigma * sigma);
+        kern[i + halfSize] = exp(exponent) / (sqrt(2 * 3.14159f) * sigma);
+        sum += kern[i + halfSize];
+    }
+
+    // Normalize the kernel values
+    for (int i = 0; i < KERNEL_SIZE; i++)
+    {
+        kern[i] /= sum;
+    }
+
+    // Apply Gaussian blur horizontally
+    float4 result = float4(0, 0, 0, 0);
+    for (int i = -halfSize; i <= halfSize; i++)
+    {
+        int2 sampleCoord = coord + int2(i, 0);
+        sampleCoord = clamp(sampleCoord, int2(0, 0), int2(resolution) - 1);
+        result += tex[sampleCoord] * kern[i + halfSize];
+    }
+
+    // Apply Gaussian blur vertically
+    float4 finalResult = float4(0, 0, 0, 0);
+    for (int i = -halfSize; i <= halfSize; i++)
+    {
+        int2 sampleCoord = coord + int2(0, i);
+        sampleCoord = clamp(sampleCoord, int2(0, 0), int2(resolution) - 1);
+        finalResult += result * kern[i + halfSize];
+    }
+
+    return finalResult;
+}
+float4 GaussianBlurM(uint2 coord, RWTexture2D<float4> tex, uint2 resolution, float sigma)
+{
+    float kern[KERNEL_SIZE_M];
+    float sum = 0.0f;
+    int halfSize = KERNEL_SIZE_M / 2;
+
+    // Calculate Gaussian kernel values
+    for (int i = -halfSize; i <= halfSize; i++)
+    {
+        float exponent = -(i * i) / (2 * sigma * sigma);
+        kern[i + halfSize] = exp(exponent) / (sqrt(2 * 3.14159f) * sigma);
+        sum += kern[i + halfSize];
+    }
+
+    // Normalize the kernel values
+    for (int i = 0; i < KERNEL_SIZE_M; i++)
+    {
+        kern[i] /= sum;
+    }
+
+    // Apply Gaussian blur horizontally
+    float4 result = float4(0, 0, 0, 0);
+    for (int i = -halfSize; i <= halfSize; i++)
+    {
+        int2 sampleCoord = coord + int2(i, 0);
+        sampleCoord = clamp(sampleCoord, int2(0, 0), int2(resolution) - 1);
+        result += tex[sampleCoord] * kern[i + halfSize];
+    }
+
+    // Apply Gaussian blur vertically
+    float4 finalResult = float4(0, 0, 0, 0);
+    for (int i = -halfSize; i <= halfSize; i++)
+    {
+        int2 sampleCoord = coord + int2(0, i);
+        sampleCoord = clamp(sampleCoord, int2(0, 0), int2(resolution) - 1);
+        finalResult += result * kern[i + halfSize];
+    }
+
+    return finalResult;
+}
+float4 GaussianBlurL(uint2 coord, RWTexture2D<float4> tex, uint2 resolution, float sigma)
+{
+    float kern[KERNEL_SIZE_L];
+    float sum = 0.0f;
+    int halfSize = KERNEL_SIZE_L / 2;
+
+    // Calculate Gaussian kernel values
+    for (int i = -halfSize; i <= halfSize; i++)
+    {
+        float exponent = -(i * i) / (2 * sigma * sigma);
+        kern[i + halfSize] = exp(exponent) / (sqrt(2 * 3.14159f) * sigma);
+        sum += kern[i + halfSize];
+    }
+
+    // Normalize the kernel values
+    for (int i = 0; i < KERNEL_SIZE_L; i++)
+    {
+        kern[i] /= sum;
+    }
+
+    // Apply Gaussian blur horizontally
+    float4 result = float4(0, 0, 0, 0);
+    for (int i = -halfSize; i <= halfSize; i++)
+    {
+        int2 sampleCoord = coord + int2(i, 0);
+        sampleCoord = clamp(sampleCoord, int2(0, 0), int2(resolution) - 1);
+        result += tex[sampleCoord] * kern[i + halfSize];
+    }
+
+    // Apply Gaussian blur vertically
+    float4 finalResult = float4(0, 0, 0, 0);
+    for (int i = -halfSize; i <= halfSize; i++)
+    {
+        int2 sampleCoord = coord + int2(0, i);
+        sampleCoord = clamp(sampleCoord, int2(0, 0), int2(resolution) - 1);
+        finalResult += result * kern[i + halfSize];
+    }
+
+    return finalResult;
+}
+
+[numthreads(32,32,1)]
+void Gaussian (uint3 id : SV_DispatchThreadID)
+{
+    float4 blurred = GaussianBlurS(id.xy, LineTex, resolution, 5);
+    //float4 blurred = GaussianBlurM(id.xy, SimTex, resolution, 100);
+    //ProcessedSimTex[id.xy] = blurred;
+    
+    LineTex[id.xy] = blurred;
+}
+
+[numthreads(32,32,1)]
+void GaussianAndDoGProcessing (uint3 id : SV_DispatchThreadID)
+{
+    float4 cur = SimTex[id.xy];
+    // Step 1: Apply Gaussian kernel with first sigma
+    float4 blurred1 = GaussianBlurM(id.xy, SimTex, resolution, 1);
+
+    // Step 2: Apply Gaussian kernel with second sigma
+    float4 blurred2 = GaussianBlurM(id.xy, SimTex, resolution, 2);
+    float4 blurred3 = GaussianBlurM(id.xy, SimTex, resolution, 5);
+
+    float4 dog = blurred1 - blurred2;
+    float bw = clamp(abs(dog.z), 0, 1);
+    float rw = 1 - bw;
+    cur.z = (bw * blurred3 + rw * cur.z);
+
+    if (abs(dog.z) > epsilon)
+    {
+        cur = blurred3;
+    }
+
+    ProcessedSimTex[id.xy] = cur;
+}
+
+
+

@@ -1,0 +1,610 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &683988082487285849
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3139855373560205517}
+  - component: {fileID: 7076116445574555109}
+  - component: {fileID: 2660346826646675775}
+  - component: {fileID: 325847813807346660}
+  - component: {fileID: 5178486884041632447}
+  m_Layer: 0
+  m_Name: FluidSim
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &3139855373560205517
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 683988082487285849}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 9129004918944528160}
+  - {fileID: 908429606444717644}
+  - {fileID: 1849026228362054696}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7076116445574555109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 683988082487285849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ac74b87e7972a841825fb2f863be843, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resolution: 256
+  minHeight: 0
+  maxHeight: 1
+  seed: 4445680
+  normalizeHeight: 0
+  noiseLayerSet: {fileID: 11400000, guid: 8653f835405eecd43926955cb1257c91, type: 2}
+  noiseLayers:
+  - name: Base
+    enabled: 1
+    octaves: 3
+    frequency: 76
+    amplitude: 0.182
+    lacunarity: 1.204
+    persistence: 0.228
+    minHeight: -0.21
+    maxHeight: 1.28
+    noiseType: 1
+  - name: Sharp Rocks Base
+    enabled: 1
+    octaves: 4
+    frequency: 367
+    amplitude: 0.138
+    lacunarity: 1.862
+    persistence: 0.592
+    minHeight: -0.22
+    maxHeight: 1
+    noiseType: 5
+  - name: Sharp Rocks
+    enabled: 1
+    octaves: 5
+    frequency: 522
+    amplitude: 0.952
+    lacunarity: 2.095
+    persistence: 0.545
+    minHeight: -0.17
+    maxHeight: 5.32
+    noiseType: 5
+--- !u!114 &2660346826646675775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 683988082487285849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d2b963e42b006342bc1c1e0373f9470, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SimulationProfile: {fileID: 11400000, guid: 9942a77817e91624ea8378630d8ec33b, type: 2}
+  currentSimulationState: 2
+  profileName: SmallScale_UnityTerrain
+  simResolution: 512
+  dt: 0.02
+  accumulatePerFrame: 20
+  dx: 1
+  g: 9.86
+  vd: 0.65
+  erosionScale: 0
+  erodeAfterSteps: 0
+  alpha: 0.5
+  beta: 2
+  epsilon: 0.01
+  terrainHeightScale: 1
+  simulate: 0
+  singleStep: 0
+  globalForce: {x: 0, y: 0}
+  waterPlaneSize: 100
+  waterPlaneResolution: 256
+  terrainPlaneSize: 100
+  terrainPlaneResolution: 256
+  updateType: 0
+  fillType: 1
+  terrainType: 3
+  boundaryType: 0
+  initializeType: 1
+  waveProfile: {fileID: 11400000, guid: 2403ccd32a283a445a1672bb71998c64, type: 2}
+  waveProfileName: CenterSquare_1.5_513
+  waveOffsetX: 0
+  waveOffsetY: 0
+  waveSizeX: 102.6
+  waveSizeY: 513
+  waveVelX: 0
+  waveVelY: 0
+  waveHeight: 15
+  gridSize: 100
+  sampleRate: 2
+  sampleEveryFrame: 0
+  processAllReadbacks: 0
+  processOneReadback: 0
+  vfxBlitRate: 1
+  simShader: {fileID: 7200000, guid: 456fe3ccc4847e24e923638d980c1081, type: 3}
+  simInitShader: {fileID: 7200000, guid: b0eed33a27f1a194b9fb14191ad22849, type: 3}
+  velocityIntegrationShader: {fileID: 7200000, guid: 2672cc2295c1e4a49b6395a68c88536a, type: 3}
+  advectionShader: {fileID: 7200000, guid: 744c27ec57ddfff429fe3218c278e0f9, type: 3}
+  heightIntegrationShader: {fileID: 7200000, guid: da5a147d8f788284f8797be47fb6534f, type: 3}
+  boundaryConditionsShader: {fileID: 7200000, guid: 4abbcf4817b31614e8bdae8f14720f2f, type: 3}
+  interactionShader: {fileID: 7200000, guid: ce4291ac5b5ee3e46b33c769c7be8863, type: 3}
+  erosionShader: {fileID: 7200000, guid: 84ccbcb9ad3d4434d8294ae872aca259, type: 3}
+  simRenderingShader: {fileID: 7200000, guid: 48ecc5e4059724340afc4194fbdc28c1, type: 3}
+  copyTexturesFromArray: {fileID: 0}
+  simTexPrev: {fileID: 0}
+  simTexNex: {fileID: 0}
+  simTex: {fileID: 0}
+  simTexLagrange: {fileID: 0}
+  processedSimTex: {fileID: 0}
+  simTexVfx: {fileID: 0}
+  randTex: {fileID: 0}
+  fftTex: {fileID: 0}
+  normalsTex: {fileID: 0}
+  cascades0: {fileID: 0}
+  cascades1: {fileID: 0}
+  cascades2: {fileID: 0}
+  cascades3: {fileID: 0}
+  cascades4: {fileID: 0}
+  cascades5: {fileID: 0}
+  waveVfxTex: {fileID: 0}
+  upscaledWaveVfxTex: {fileID: 0}
+  lineTex: {fileID: 0}
+  windApplicationTex: {fileID: 0}
+  windPatternTex: {fileID: 0}
+  windMaterialTex: {fileID: 0}
+  heightMask: {fileID: 0}
+  upscaledSimResolution: 1024
+  upscaledSimTex: {fileID: 0}
+  upscaledVfxTexResolution: 1024
+  upscaledVfxTex: {fileID: 0}
+  readTex: {fileID: 0}
+  planeMaterial: {fileID: 2100000, guid: e05f782418b135b4b9e89d06d37ceef2, type: 2}
+  terrainMaterial: {fileID: 2100000, guid: 8cb94253a44d7684abb8bdcbc3dfbab1, type: 2}
+  causticsMaterial: {fileID: 2100000, guid: 9d0831e48450d0f498b0f996560c19b0, type: 2}
+  useDefaultHeightmap: 1
+  defaultHeightmap: {fileID: 2800000, guid: 8726733dbd8b3024a96fc3ccab08b57b, type: 3}
+  _processedTexture: {fileID: 0}
+  terrain: {fileID: 0}
+  advectVelocity: 1
+  bffec: 1
+  updateAdvectedVelocity: 1
+  integrateHeight: 1
+  integrateVelocity: 1
+  updateVelocity: 1
+  logProcessedTex: 0
+  useErosion: 1
+  filePrefix: 
+  headlessMode: 0
+  applyGlobalWind: 0
+  globalWindRate: 1
+  globalWindVelocities: {x: 0.02, y: 0}
+  applyTextureWind: 0
+  textureWindRate: 2
+  defaultWindTexture: {fileID: 0}
+  windTextureScale: 1
+  applyMaterialWind: 1
+  materialWindRate: 2
+  windMaterial: {fileID: 2100000, guid: 5cc8b1f92cd52eb4a8b1e39e7363efc8, type: 2}
+  windMaterialScale: 0.001
+  terminated: 0
+--- !u!114 &325847813807346660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 683988082487285849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 685ea1ed9f9d38d408a53485e620fe22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  particleVfxShader: {fileID: 7200000, guid: 7c5042b3e9c655d4cb7916970f781c13, type: 3}
+  maxParticles: 100000
+  waveParticlesVisualEffect: {fileID: 10611717186655926}
+  debugDoParticleVFX: 1
+--- !u!114 &5178486884041632447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 683988082487285849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46f98f007fde1aa4fbfe37b618110ce1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initialSpectrumShader: {fileID: 7200000, guid: 556a06c13ffff614aac972ae2b26793d, type: 3}
+  timeDependentSpectrumShader: {fileID: 0}
+  initializationBuffer: {fileID: 0}
+  wavesData: {fileID: 0}
+  initialSpectrum: {fileID: 0}
+  size: 512
+  cascadesNumber: 4
+  lengthScales: {x: 1000, y: 500, z: 250, w: 125}
+  cutoffsLow: {x: 0.1, y: 0.5, z: 1, w: 2}
+  cutoffsHigh: {x: 0.5, y: 1, z: 2, w: 4}
+  localWindDirection: 45
+  swellDirection: 90
+  equalizerLerpValue: 0.5
+  depth: 50
+  chop: 1.5
+  localSpectrumScale: 1
+  localSpectrumShortWavesFade: 0.8
+  swellSpectrumScale: 0.5
+  swellSpectrumShortWavesFade: 0.6
+  equalizerRamp0: {fileID: 0}
+  equalizerRamp1: {fileID: 0}
+  equalizerPresetXMin: -5
+  equalizerPresetXMax: 5
+  energySpectrumType: 1
+  windSpeed: 15
+  fetch: 100
+  peaking: 3.3
+  alignment: 0.8
+  extraAlignment: 0.5
+--- !u!1 &5674805522049184070
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 908429606444717644}
+  - component: {fileID: 3652454712622061476}
+  m_Layer: 0
+  m_Name: Reflection Probe
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &908429606444717644
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5674805522049184070}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3139855373560205517}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!215 &3652454712622061476
+ReflectionProbe:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5674805522049184070}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Type: 0
+  m_Mode: 1
+  m_RefreshMode: 0
+  m_TimeSlicingMode: 0
+  m_Resolution: 256
+  m_UpdateFrequency: 0
+  m_BoxSize: {x: 100, y: 60.3, z: 100}
+  m_BoxOffset: {x: 50, y: 20.2, z: 50}
+  m_NearClip: 0.01
+  m_FarClip: 1000
+  m_ShadowDistance: 100
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IntensityMultiplier: 1
+  m_BlendDistance: 1
+  m_HDR: 1
+  m_BoxProjection: 0
+  m_RenderDynamicObjects: 0
+  m_UseOcclusionCulling: 1
+  m_Importance: 1
+  m_CustomBakedTexture: {fileID: 0}
+--- !u!1 &8383669016663992273
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9129004918944528160}
+  - component: {fileID: 10611717186655926}
+  - component: {fileID: 754688715499148667}
+  m_Layer: 0
+  m_Name: WaveVFX
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9129004918944528160
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8383669016663992273}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3139855373560205517}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!2083052967 &10611717186655926
+VisualEffect:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8383669016663992273}
+  m_Enabled: 1
+  m_Asset: {fileID: 8926484042661614526, guid: 71f0052a84def3b44a12fd8cce5a7bbb, type: 3}
+  m_InitialEventName: OnPlay
+  m_InitialEventNameOverriden: 0
+  m_StartSeed: 0
+  m_ResetSeedOnPlay: 1
+  m_AllowInstancing: 1
+  m_ResourceVersion: 1
+  m_PropertySheet:
+    m_Float:
+      m_Array:
+      - m_Value: 30
+        m_Name: Buoyancy
+        m_Overridden: 1
+      - m_Value: 100
+        m_Name: SimGridSize
+        m_Overridden: 1
+      - m_Value: -19.72
+        m_Name: Gravity
+        m_Overridden: 1
+      - m_Value: 1
+        m_Name: WaterDisplacementScale
+        m_Overridden: 1
+      - m_Value: 1
+        m_Name: TerrainDisplacementScale
+        m_Overridden: 1
+      - m_Value: 0
+        m_Name: Offset
+        m_Overridden: 1
+      - m_Value: 5
+        m_Name: VelocityScale
+        m_Overridden: 1
+      - m_Value: 0.01
+        m_Name: DisplacementOffset
+        m_Overridden: 1
+      - m_Value: 1
+        m_Name: ParticleDrag
+        m_Overridden: 1
+      - m_Value: -30
+        m_Name: ParticleGravity
+        m_Overridden: 1
+    m_Vector2f:
+      m_Array: []
+    m_Vector3f:
+      m_Array: []
+    m_Vector4f:
+      m_Array: []
+    m_Uint:
+      m_Array:
+      - m_Value: 0
+        m_Name: particleCount
+        m_Overridden: 1
+    m_Int:
+      m_Array: []
+    m_Matrix4x4f:
+      m_Array: []
+    m_AnimationCurve:
+      m_Array: []
+    m_Gradient:
+      m_Array: []
+    m_NamedObject:
+      m_Array:
+      - m_Value: {fileID: 2800000, guid: 276d9e395ae18fe40a9b4988549f2349, type: 3}
+        m_Name: sampleTexture
+        m_Overridden: 1
+    m_Bool:
+      m_Array: []
+--- !u!73398921 &754688715499148667
+VFXRenderer:
+  serializedVersion: 1
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8383669016663992273}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 0
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!1 &9176556374344807286
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1849026228362054696}
+  - component: {fileID: 6009552214302199423}
+  - component: {fileID: 8151973386561774938}
+  m_Layer: 4
+  m_Name: Particle_Test
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1849026228362054696
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9176556374344807286}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 50, y: 0, z: 50}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3139855373560205517}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!2083052967 &6009552214302199423
+VisualEffect:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9176556374344807286}
+  m_Enabled: 1
+  m_Asset: {fileID: 8926484042661614526, guid: d799bbe915481f34da6af61bf59dd274, type: 3}
+  m_InitialEventName: OnPlay
+  m_InitialEventNameOverriden: 1
+  m_StartSeed: 0
+  m_ResetSeedOnPlay: 1
+  m_AllowInstancing: 1
+  m_ResourceVersion: 1
+  m_PropertySheet:
+    m_Float:
+      m_Array:
+      - m_Value: 20
+        m_Name: Water Displacement Scale
+        m_Overridden: 1
+      - m_Value: 5
+        m_Name: Buoyancy
+        m_Overridden: 1
+      - m_Value: 0.01
+        m_Name: DisplacementOffset
+        m_Overridden: 1
+    m_Vector2f:
+      m_Array: []
+    m_Vector3f:
+      m_Array: []
+    m_Vector4f:
+      m_Array: []
+    m_Uint:
+      m_Array: []
+    m_Int:
+      m_Array: []
+    m_Matrix4x4f:
+      m_Array: []
+    m_AnimationCurve:
+      m_Array: []
+    m_Gradient:
+      m_Array: []
+    m_NamedObject:
+      m_Array:
+      - m_Value: {fileID: 2800000, guid: 276d9e395ae18fe40a9b4988549f2349, type: 3}
+        m_Name: SimTex
+        m_Overridden: 1
+      - m_Value: {fileID: 0}
+        m_Name: SampledTexture
+        m_Overridden: 1
+    m_Bool:
+      m_Array: []
+--- !u!73398921 &8151973386561774938
+VFXRenderer:
+  serializedVersion: 1
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9176556374344807286}
+  m_Enabled: 0
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 0
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0

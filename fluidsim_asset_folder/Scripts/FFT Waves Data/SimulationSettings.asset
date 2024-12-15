@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a292970be94aac45a370674e949c4db, type: 3}
+  m_Name: SimulationSettings
+  m_EditorClassIdentifier: 
+  _resolution: 512
+  _cascadesNumber: 4
+  _anisoLevel: 1
+  _simulateFoam: 1
+  _updateSpectrum: 1
+  _readbackCascades: 0
+  _samplingIterations: 1
+  _domainsMode: 0
+  _simulationScale: 6.71
+  _allowOverlap: 0
+  _minWavesInCascade: 6
+  _c0Scale: 0
+  _c1Scale: 0
+  _c2Scale: 0
+  _c3Scale: 0
+  _displaySpectrum: {fileID: 0}

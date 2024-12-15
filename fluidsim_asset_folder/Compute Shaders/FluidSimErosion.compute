@@ -1,0 +1,268 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel Erosion
+
+#include "FluidSimCS.compute"
+
+//float erosionCoefficient;
+
+float hash(float2 p)
+{
+    return frac(sin(dot(p, float2(127.1, 311.7))) * 43758.5453);
+}
+
+float gradientNoise(float2 p)
+{
+    float2 i = floor(p);
+    float2 f = frac(p);
+
+    // Four corners in 2D of a square
+    float a = hash(i);
+    float b = hash(i + float2(1.0, 0.0));
+    float c = hash(i + float2(0.0, 1.0));
+    float d = hash(i + float2(1.0, 1.0));
+
+    // Smooth interpolation
+    float2 u = f * f * (3.0 - 2.0 * f);
+
+    // Mix four corners percentages
+    return lerp(a, b, u.x) +
+           (c - a) * u.y * (1.0 - u.x) +
+           (d - b) * u.x * u.y;
+}
+
+
+[numthreads(32,32,1)]
+void Erosion (uint3 id : SV_DispatchThreadID)
+{
+    
+    // Fetch current values from SimTex
+    float4 cur = SimTex[id.xy];
+    float2 velocity = cur.xy;
+    float velocityMagnitude = length(velocity);
+
+    // Define erosion parameters
+    float minVelocityThreshold = .001;
+    float erosionRate = erosionCoefficient;
+    float minHeight = 0;
+
+    // Calculate erosion amount if above velocity threshold
+    float erosionAmount = (velocityMagnitude > minVelocityThreshold) ? (velocityMagnitude * erosionRate) : 0.0f;
+
+    // Outflow erosion contribution from this cell
+    float outflowErosion = erosionAmount;
+    float inflowErosion = 0.0f;
+
+    // Define offsets for neighboring cells: right, up, left, down
+    int2 offsets[4] = { int2(1, 0), int2(0, 1), int2(-1, 0), int2(0, -1) };
+
+    // Calculate inflow erosion from valid neighboring cells
+    for (int i = 0; i < 4; i++)
+    {
+        int2 neighborPos = int2(id.xy) + offsets[i];
+        bool validNeighbor = neighborPos.x >= 0 && neighborPos.y >= 0 && neighborPos.x < resolution && neighborPos.y < resolution;
+        
+        float4 neighbor = validNeighbor ? SimTex[neighborPos] : cur;
+        
+        float2 neighborVelocity = neighbor.xy;
+        float neighborVelocityMagnitude = length(neighborVelocity);
+        float neighborErosionAmount = (neighborVelocityMagnitude > minVelocityThreshold) ? (neighborVelocityMagnitude * erosionRate) : 0.0f;
+        
+        // Calculate inflow based on neighbor velocity direction and magnitude
+        float inflowContribution = max(dot(normalize(neighborVelocity), -float2(offsets[i])), 0.0f) * neighborErosionAmount;
+
+        // Only allow inflow if neighbor has more mass than the current cell
+        if (neighbor.z + neighbor.w > cur.z + cur.w && neighbor.z > epsilon)
+        {
+            inflowErosion += inflowContribution;
+        }
+    }
+
+    // Calculate net erosion effect (inflow - outflow)
+    float netErosion = inflowErosion - outflowErosion;
+
+    // Adjust terrain height while conserving mass
+    float terrainHeight = max(cur.w + netErosion, minHeight);
+
+    // Update the terrain height in SimTexNex, preserving other components
+    cur.w = terrainHeight;
+    SimTex[id.xy] = cur;
+    SimTexNex[id.xy] = cur;
+    
+
+    /*
+    // Fetch current values from SimTex
+    float4 cur = SimTex[id.xy];
+    float2 velocity = cur.xy;
+    float velocityMagnitude = length(velocity);
+
+    // Define erosion parameters
+    float minVelocityThreshold = 0.01;
+    float erosionRate = erosionCoefficient;
+    float minHeight = epsilon;
+
+    // Calculate error magnitude for adaptive erosion rate
+    float2 macCormackError = SimTexPrev[id.xy].xy - SimTex[id.xy].xy;
+    float errorMagnitude = length(macCormackError);
+    errorMagnitude = 0;
+    float adaptiveErosionRate = erosionRate * (1.0 + errorMagnitude); // Scales with error
+
+    // Calculate erosion amount if above velocity threshold
+    float erosionAmount = (velocityMagnitude > minVelocityThreshold) ? (velocityMagnitude * adaptiveErosionRate) : 0.0f;
+
+    // Outflow erosion contribution from this cell
+    //float outflowErosion = erosionAmount;
+    float outflowErosion = velocityMagnitude * adaptiveErosionRate;
+    float inflowErosion = 0.0f;
+
+    // Define offsets for neighboring cells: right, up, left, down
+    int2 offsets[4] = { int2(1, 0), int2(0, 1), int2(-1, 0), int2(0, -1) };
+
+    // Calculate inflow erosion from valid neighboring cells
+    for (int i = 0; i < 4; i++)
+    {
+        int2 neighborPos = int2(id.xy) + offsets[i];
+        bool validNeighbor = neighborPos.x >= 0 && neighborPos.y >= 0 && neighborPos.x < resolution && neighborPos.y < resolution;
+        
+        float4 neighbor = validNeighbor ? SimTex[neighborPos] : cur;
+        
+        float2 neighborVelocity = neighbor.xy;
+        float neighborVelocityMagnitude = length(neighborVelocity);
+        float neighborErosionAmount = (neighborVelocityMagnitude > minVelocityThreshold) ? (neighborVelocityMagnitude * adaptiveErosionRate) : 0.0f;
+        
+        
+        
+        // Calculate inflow based on neighbor velocity direction and magnitude
+        float inflowContribution = max(1-dot(normalize(neighborVelocity), -float2(offsets[i])), 0.0f) * neighborErosionAmount;
+        neighbor.w -= inflowContribution;
+        //SimTex[neighborPos] = neighbor;
+        //SimTexNex[neighborPos] = neighbor;
+        //float inflowContribution = max(dot(normalize(neighborVelocity), -SimTex[offsets[i]].xy), 0.0f) * neighborErosionAmount;
+        //float inflowContribution_2 = max(0,(1-dot(cur.xy, neighborVelocity)) * neighborErosionAmount);
+        //float inflowContribution = max(0.0, (1 - dot(normalize(cur.xy), normalize(neighborVelocity)))) * neighborErosionAmount;
+
+        // Only allow inflow if neighbor has more mass than the current cell
+        if (neighbor.w + neighbor.z > cur.z + cur.w && neighbor.z > epsilon)
+        {
+            inflowErosion += inflowContribution;
+            
+        }
+    }
+
+    // Calculate net erosion effect (inflow - outflow)
+    float netErosion = inflowErosion - outflowErosion;
+    
+
+    // Adjust terrain height while conserving mass
+    float terrainHeight = max(cur.w + netErosion, minHeight);
+
+    // Update the terrain height in SimTexNex, preserving other components
+    cur.w = terrainHeight;
+    SimTex[id.xy] = cur;
+    SimTexNex[id.xy] = cur;
+    
+    */
+
+    //r->l->t->b
+    /*
+    float4 cur = SimTex[id.xy];
+    
+    float minVelocity = 0.1f;
+    float maxVelocity = 1.0f;
+    float curMagnitude = length(cur.xy);
+    if(curMagnitude < minVelocity) return;
+    float4 r = Right(id, SimTex, resolution);
+    float4 l = Left(id, SimTex);
+    float4 t = Top(id, SimTex, resolution);
+    float4 b = Bottom(id, SimTex);
+    float rz = r.w > epsilon ? r.w : 0;
+    float lz = l.w > epsilon ? l.w : 0;
+    float tz = t.w > epsilon ? t.w : 0;
+    float bz = b.w > epsilon ? b.w : 0;
+    
+    float hb0 = cur.x <= 0 ? rz : cur.w;
+    float hb1 = l.x >= 0 ? lz : cur.w;
+    float hb2 = cur.y <= 0 ? tz : cur.w;
+    float hb3 = b.y >= 0 ? bz : cur.w;
+    
+
+    
+    float p0 = hb0 * cur.x * erosionCoefficient;
+    float p1 = hb1 * l.x * erosionCoefficient;
+    float p2 = hb2 * cur.y * erosionCoefficient;
+    float p3 = hb3 * b.y * erosionCoefficient;
+    
+    
+    float tmp = cur.w - (((p0 - p1 + p2 - p3) / dx) * dt);
+    tmp = max(0,tmp);
+    
+    float4 next = float4(SimTex[id.xy].xyz, tmp);
+    
+    //SimTex[id.xy] = next;
+    SimTexNex[id.xy] = next;
+    */
+
+    // Fetch current values from SimTex
+    /*
+float4 cur = SimTex[id.xy];
+float2 velocity = cur.xy;
+float velocityMagnitude = length(velocity);
+
+// Define erosion parameters
+float minVelocityThreshold = 0.1f;
+float erosionRate = erosionCoefficient;
+float minHeight = epsilon;
+
+// Skip erosion if the velocity is too low
+if(velocityMagnitude < minVelocityThreshold) return;
+
+// Neighboring cell values
+float4 r = Right(id, SimTex, resolution);
+float4 l = Left(id, SimTex);
+float4 t = Top(id, SimTex, resolution);
+float4 b = Bottom(id, SimTex);
+
+// Height values for erosion calculation
+float rz = r.w > epsilon ? r.w : 0;
+float lz = l.w > epsilon ? l.w : 0;
+float tz = t.w > epsilon ? t.w : 0;
+float bz = b.w > epsilon ? b.w : 0;
+
+// Slope-based scaling (steeper slopes lead to more erosion)
+float slopeFactorX = abs(cur.w - r.w) + abs(cur.w - l.w);
+float slopeFactorY = abs(cur.w - t.w) + abs(cur.w - b.w);
+
+// Moisture-dependent erosion (wet areas erode more)
+float wetness = (cur.z + r.z + l.z + t.z + b.z) * 0.2;
+float moistureErosionCoefficient = erosionRate * (1.0 + wetness);
+
+// Flow divergence factor for realistic erosion
+float divergence = (cur.x - l.x) + (r.x - cur.x) + (cur.y - b.y) + (t.y - cur.y);
+float divergenceFactor = 1.0 + clamp(divergence, -1.0, 1.0);
+
+// Terrain hardness based on a noise function (simulate varying terrain resistance)
+float hardness = gradientNoise(id.xy) * 0.5 + 0.5; // Use a noise function if available, or replace with a texture if necessary
+float adaptiveErosionCoefficient = moistureErosionCoefficient * hardness;
+
+// Calculate inflow/outflow erosion based on slope, divergence, and hardness factors
+float hb0 = cur.x <= 0 ? rz : cur.w;
+float hb1 = l.x >= 0 ? lz : cur.w;
+float hb2 = cur.y <= 0 ? tz : cur.w;
+float hb3 = b.y >= 0 ? bz : cur.w;
+
+float p0 = hb0 * cur.x * adaptiveErosionCoefficient * slopeFactorX * divergenceFactor;
+float p1 = hb1 * l.x * adaptiveErosionCoefficient * slopeFactorX * divergenceFactor;
+float p2 = hb2 * cur.y * adaptiveErosionCoefficient * slopeFactorY * divergenceFactor;
+float p3 = hb3 * b.y * adaptiveErosionCoefficient * slopeFactorY * divergenceFactor;
+
+// Adjust terrain height based on net erosion effect
+float tmp = cur.w - (((p0 - p1 + p2 - p3) / dx) * dt);
+tmp = max(minHeight, tmp); // Ensure terrain doesn't fall below minHeight
+
+// Update terrain height in SimTexNex, preserving other components
+float4 next = float4(SimTex[id.xy].xyz, tmp);
+SimTexNex[id.xy] = next;
+
+*/
+
+    
+}

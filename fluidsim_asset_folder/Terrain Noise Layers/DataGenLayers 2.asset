@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b82fa2916f96c084aae3441c0bb79e5a, type: 3}
+  m_Name: DataGenLayers 2
+  m_EditorClassIdentifier: 
+  layers:
+  - name: Base
+    enabled: 1
+    octaves: 3
+    frequency: 76
+    amplitude: 0.182
+    lacunarity: 1.204
+    persistence: 0.228
+    minHeight: -0.21
+    maxHeight: 1.28
+    noiseType: 1
+  - name: Sharp Rocks Base
+    enabled: 1
+    octaves: 4
+    frequency: 367
+    amplitude: 0.138
+    lacunarity: 1.862
+    persistence: 0.592
+    minHeight: -0.22
+    maxHeight: 1
+    noiseType: 5
+  - name: Sharp Rocks
+    enabled: 1
+    octaves: 5
+    frequency: 522
+    amplitude: 0.952
+    lacunarity: 2.095
+    persistence: 0.545
+    minHeight: -0.17
+    maxHeight: 5.32
+    noiseType: 5

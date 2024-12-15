@@ -1,0 +1,45 @@
+#pragma kernel CopyTextures
+
+// Input Texture2DArray
+RWTexture2DArray<float4>_InputTextures;
+
+// Output RenderTextures
+RWTexture2D<float4> _OutputTexture0;
+RWTexture2D<float4> _OutputTexture1;
+RWTexture2D<float4> _OutputTexture2;
+RWTexture2D<float4> _OutputTexture3;
+RWTexture2D<float4> _OutputTexture4;
+RWTexture2D<float4> _OutputTexture5;
+
+# define KERNEL_SIZE 32
+
+[numthreads(KERNEL_SIZE, KERNEL_SIZE, 1)]
+void CopyTextures(uint3 id : SV_DispatchThreadID)
+{
+    uint x = id.x;
+    uint y = id.y;
+
+    // Get dimensions of the textures
+    uint width, height, layers;
+    _InputTextures.GetDimensions(width, height, layers);
+
+    // Ensure we're within bounds
+    if (x >= width || y >= height || layers < 4)
+        return;
+
+    // Read from each layer of the Texture2DArray
+    float4 color0 = _InputTextures[int3(x, y, 0)];
+    float4 color1 = _InputTextures[int3(x, y, 1)];
+    float4 color2 = _InputTextures[int3(x, y, 2)];
+    float4 color3 = _InputTextures[int3(x, y, 3)];
+    float4 color4 = _InputTextures[int3(x, y, 4)];
+    float4 color5 = _InputTextures[int3(x, y, 5)];
+
+    // Write to the corresponding output textures
+    _OutputTexture0[int2(x, y)] = color0;
+    _OutputTexture1[int2(x, y)] = color1;
+    _OutputTexture2[int2(x, y)] = color2;
+    _OutputTexture3[int2(x, y)] = color3;
+    _OutputTexture4[int2(x, y)] = color4;
+    _OutputTexture5[int2(x, y)] = color5;
+}
